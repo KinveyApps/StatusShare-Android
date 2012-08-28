@@ -46,6 +46,8 @@ import com.kinvey.KinveyMetadata;
 public class Update {
 
     public static final String TAG = Update.class.getSimpleName();
+    public static final int MAX_W = 512;
+    public static final int MAX_H = 512;
 
     private String text;
 
@@ -117,8 +119,28 @@ public class Update {
     public void setThumbnail(String url) {
         thumbnail = null;
         try {
-           thumbnail = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
-           //android.util.Log.d(TAG, "url: " + url + ", size: " + thumbnail.getHeight() + " x " + thumbnail.getWidth());
+            BitmapFactory.Options opts = new BitmapFactory.Options();
+            opts.inJustDecodeBounds = true;
+
+            int scaleFactor = 0;
+            do {
+                opts.inSampleSize = (int) Math.pow(2, scaleFactor++);
+                BitmapFactory.decodeStream((InputStream) new URL(url).getContent(), null, opts);
+                android.util.Log.d(TAG, "opts.inSampleSize: " + opts.inSampleSize + ", opts.outWidth: " + opts.outWidth);
+            } while(opts.outWidth > MAX_W || opts.outHeight > MAX_H);
+
+/**
+            BitmapFactory.decodeStream((InputStream) new URL(url).getContent(), null, opts);
+            android.util.Log.d(TAG, "opts.outHeight: " + opts.outHeight + ", opts.outWidth: " + opts.outWidth);
+            if(opts.outWidth > MAX_W || opts.outHeight > MAX_H) {
+                opts.inSampleSize = (int) (opts.outWidth / MAX_W > opts.outHeight / MAX_H ? opts.outWidth / MAX_W : opts.outHeight / MAX_H) + 1;
+            }
+            android.util.Log.d(TAG, "opts.inSampleSize: " + opts.inSampleSize);
+**/
+
+            opts.inJustDecodeBounds = false;
+            thumbnail = BitmapFactory.decodeStream((InputStream) new URL(url).getContent(), null, opts);
+            android.util.Log.d(TAG, "opts.outWidth: " + opts.outWidth + ", size: " + thumbnail.getHeight() + " x " + thumbnail.getWidth());
        } catch (MalformedURLException e) {
            e.printStackTrace();
        } catch (IOException e) {

@@ -49,6 +49,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.kinvey.KCSClient;
+import com.kinvey.KinveyMetadata;
 import com.kinvey.KinveyResource;
 import com.kinvey.util.KinveyCallback;
 import com.kinvey.util.ScalarCallback;
@@ -136,7 +137,7 @@ public class WriteUpdateActivity extends Activity {
     }
 
     public void postUpdate(View view) {
-        ProgressDialog progressDialog = ProgressDialog.show(WriteUpdateActivity.this, "",
+        final ProgressDialog progressDialog = ProgressDialog.show(WriteUpdateActivity.this, "",
                         "Posting. Please wait...", true);
         if (mPath != null) {
             final File file = new File(mPath);
@@ -149,7 +150,7 @@ public class WriteUpdateActivity extends Activity {
                     @Override
                     public void onFailure(Throwable e) {
                         e.printStackTrace();
-                        saveUpdate();
+                        saveUpdate(progressDialog);
                     }
 
                     @Override
@@ -162,7 +163,7 @@ public class WriteUpdateActivity extends Activity {
                             attachment.put("_loc", assetname);
                             attachment.put("_type", "resource");
                             //android.util.Log.d(TAG, "saveUpdate: " + attachment);
-                            saveUpdate(attachment);
+                            saveUpdate(progressDialog, attachment);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -171,36 +172,41 @@ public class WriteUpdateActivity extends Activity {
                 });
             } else {
                 android.util.Log.w(TAG, "Skipping attachment because of indeterminate MIME type for file = " + mPath);
-                saveUpdate();
+                saveUpdate(progressDialog);
             }
         } else {
-            saveUpdate();
+            saveUpdate(progressDialog);
         }
     }
 
-    public void saveUpdate() {
-        saveUpdate(null);
+    public void saveUpdate(ProgressDialog progressDialog) {
+        saveUpdate(progressDialog, null);
     }
 
-    public void saveUpdate(JSONObject attachment) {
+    public void saveUpdate(final ProgressDialog progressDialog, JSONObject attachment) {
         UpdateEntity updateEntity = new UpdateEntity();
 
         updateEntity.setText(((EditText) findViewById(R.id.update)).getText().toString());
         updateEntity.setAttachment(attachment);
+        // FIXME
+        //android.util.Log.d(TAG, "mLocked = " + mLocked);
+        KinveyMetadata md = new KinveyMetadata(null, null, !mLocked, null, mSharedClient);
+        updateEntity.setMeta(md);
 
-        // FIXME do something with mLocked and GLoballyReadable
-
+        android.util.Log.d(TAG, "updateEntity.getMeta().isGloballyReadable() = " + updateEntity.getMeta().isGloballyReadable());
         mSharedClient.mappeddata("Updates").save(updateEntity, new ScalarCallback<UpdateEntity>() {
 
             @Override
             public void onFailure(Throwable e) {
                 e.printStackTrace();
+                progressDialog.dismiss();
                 finish();
             }
 
             @Override
             public void onSuccess(UpdateEntity updateEntity) {
-                //android.util.Log.d(TAG, "postUpdate: SUCCESS _id=" + updateEntity.getId());
+                android.util.Log.d(TAG, "postUpdate: SUCCESS _id = " + updateEntity.getId() +  ", gr = " + updateEntity.getMeta().isGloballyReadable());
+                progressDialog.dismiss();
                 finish();
             }
         });

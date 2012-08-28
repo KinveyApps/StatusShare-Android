@@ -93,9 +93,9 @@ public class AuthorViewActivity extends Activity {
         SimpleQuery q = new SimpleQuery();
         q.addCriteria("_acl.creator", "==", mFriend.getId());
         //FIXME
-//        q.setLimitQueryModifier(new LimitQueryModifier (UPDATES_LIST_SIZE));
-//        q.setSortQueryModifier(new SortQueryModifier ("_acl.lmt", true));
-        //android.util.Log.v(TAG, q.toString());
+        q.setSortQueryModifier(new SortQueryModifier ("_acl.lmt", true));
+        q.setLimitQueryModifier(new LimitQueryModifier (UPDATES_LIST_SIZE));
+        android.util.Log.v(TAG, q.toString());
 
         MappedAppdata mappedAppdata = mSharedClient.mappeddata("Updates");
         mappedAppdata.setQuery(q);
@@ -131,7 +131,7 @@ public class AuthorViewActivity extends Activity {
                     mUpdates.add(update);
                 }
 
-                Collections.sort(mUpdates, LATEST_FIRST_ORDER);
+                //Collections.sort(mUpdates, LATEST_FIRST_ORDER);
 
                 lv.setAdapter(new UpdateAdapter(AuthorViewActivity.this, mUpdates));
 
