@@ -21,7 +21,7 @@
  * Author: Tom Giesberg
  */
 
-package com.kinvey.kinveygram;
+package com.kinvey.statusshare;
 
 import android.content.Intent;
 import android.os.Bundle;

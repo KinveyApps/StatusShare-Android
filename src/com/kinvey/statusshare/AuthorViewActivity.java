@@ -21,7 +21,7 @@
  * Author: Tom Giesberg
  */
 
-package com.kinvey.kinveygram;
+package com.kinvey.statusshare;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,18 +57,19 @@ public class AuthorViewActivity extends Activity {
     private List<Update> mUpdates;
     private Friend mFriend;
 
+/*
     static final Comparator<Update> LATEST_FIRST_ORDER = new Comparator<Update>() {
         public int compare(Update u1, Update u2) {
             return u2.getDate().compareTo(u1.getDate());
         }
     };
-
+*/
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSharedClient = ((KinveyGramApp) getApplication()).getKinveyService();
-        mCalendar = ((KinveyGramApp) getApplication()).getAppCalendar();
+        mSharedClient = ((StatusShareApp) getApplication()).getKinveyService();
+        mCalendar = ((StatusShareApp) getApplication()).getAppCalendar();
 
         setContentView(R.layout.author_view);
         Intent myIntent = getIntent();
@@ -92,8 +93,7 @@ public class AuthorViewActivity extends Activity {
 
         SimpleQuery q = new SimpleQuery();
         q.addCriteria("_acl.creator", "==", mFriend.getId());
-        //FIXME
-        q.setSortQueryModifier(new SortQueryModifier ("_acl.lmt", true));
+        q.setSortQueryModifier(new SortQueryModifier ("_acl.lmt", false));
         q.setLimitQueryModifier(new LimitQueryModifier (UPDATES_LIST_SIZE));
         android.util.Log.v(TAG, q.toString());
 

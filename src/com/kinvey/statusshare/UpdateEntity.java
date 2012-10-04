@@ -21,7 +21,7 @@
  * Author: Tom Giesberg
  */
 
-package com.kinvey.kinveygram;
+package com.kinvey.statusshare;
 
 import java.util.Arrays;
 import java.util.List;

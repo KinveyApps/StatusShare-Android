@@ -21,7 +21,7 @@
  * Author: Tom Giesberg
  */
 
-package com.kinvey.kinveygram;
+package com.kinvey.statusshare;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -35,40 +35,24 @@ import com.kinvey.KinveySettings;
  * Store global state. In this case, the single instance of KCS.
  *
  */
-public class KinveyGramApp extends Application {
+public class StatusShareApp extends Application {
 
-    public static final String TAG = KinveyGramApp.class.getSimpleName();
+    public static final String TAG = StatusShareApp.class.getSimpleName();
 
     private KCSClient service;
     private Calendar appCalendar;
 
     // Enter your Kinvey app credentials
-
-// FIXME before releasing
-//    private static final String APP_KEY = "your_app_key";
-//    private static final String APP_SECRET = "your_app_secret";
-
-// KinveyGram
-    private static final String APP_KEY = "kid2338";
-    private static final String APP_SECRET = "f5cd03e2bb334b4887f73849cdedb78b";
-
-// KinveyGram2
-//    private static final String APP_KEY = "kid_PVB8IV0f0";
-//    private static final String APP_SECRET = "ef6006120da444d5b8d849c74e03aa8a";
-
-// KinveyGram3
-//    private static final String APP_KEY = "kid_TTLKLIe2N";
-//    private static final String APP_SECRET = "1c5df31e91554bdabf9cba77db4417a9";
+    private static final String APP_KEY = "your_app_key";
+    private static final String APP_SECRET = "your_app_secret";
 
     @Override
     public void onCreate() {
         super.onCreate();
-        //android.util.Log.d(TAG, "onCreate");
         initialize();
     }
 
     private void initialize() {
-        // Enter your app credentials here
         service = KCSClient.getInstance(this.getApplicationContext(), new KinveySettings(APP_KEY, APP_SECRET));
 
         TimeZone reference = TimeZone.getTimeZone("GMT");

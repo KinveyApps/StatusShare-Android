@@ -21,7 +21,7 @@
  * Author: Tom Giesberg
  */
 
-package com.kinvey.kinveygram;
+package com.kinvey.statusshare;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -55,7 +55,7 @@ public class LoginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSharedClient = ((KinveyGramApp) getApplication()).getKinveyService();
+        mSharedClient = ((StatusShareApp) getApplication()).getKinveyService();
         createContent();
         addEditListeners();
     }
@@ -65,11 +65,6 @@ public class LoginActivity extends Activity {
         mButtonSubmit = (Button) findViewById(R.id.submit);
         mEditUserName = (EditText) findViewById(R.id.userName);
         mEditPassword = (EditText) findViewById(R.id.password);
-
-        // FIXME remove before release
-        mEditUserName.setText("droid");
-        mEditPassword.setText("droid");
-        // end FIXME
     }
 
     public void addEditListeners() {

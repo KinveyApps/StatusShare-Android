@@ -38,7 +38,7 @@ Author: Tom Giesberg -->
             style="@style/ButtonText"
             android:layout_marginBottom="60dp"
             android:textSize="30dp"
-            android:text="Welcome to KinveyGram"
+            android:text="Welcome to StatusShare"
             />
         <EditText
             android:id="@+id/userName"

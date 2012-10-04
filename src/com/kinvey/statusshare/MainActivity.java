@@ -21,7 +21,7 @@
  * Author: Tom Giesberg
  */
 
-package com.kinvey.kinveygram;
+package com.kinvey.statusshare;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         mStatus = (TextView) findViewById(R.id.status);
-        mSharedClient = ((KinveyGramApp) getApplication()).getKinveyService();
+        mSharedClient = ((StatusShareApp) getApplication()).getKinveyService();
 
         mStatus.setText("Checking connection..");
         mSharedClient.isKinveyReachable(new KinveyCallback<Boolean>() {

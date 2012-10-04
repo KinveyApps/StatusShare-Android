@@ -21,7 +21,7 @@
  * Author: Tom Giesberg
  */
 
-package com.kinvey.kinveygram;
+package com.kinvey.statusshare;
 
 import java.io.File;
 import java.util.UUID;
@@ -72,7 +72,7 @@ public class WriteUpdateActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSharedClient = ((KinveyGramApp) getApplication()).getKinveyService();
+        mSharedClient = ((StatusShareApp) getApplication()).getKinveyService();
         mLocked = false;
         mPath = null;
 
@@ -188,8 +188,6 @@ public class WriteUpdateActivity extends Activity {
 
         updateEntity.setText(((EditText) findViewById(R.id.update)).getText().toString());
         updateEntity.setAttachment(attachment);
-        // FIXME
-        //android.util.Log.d(TAG, "mLocked = " + mLocked);
         KinveyMetadata md = new KinveyMetadata(null, null, !mLocked, null, mSharedClient);
         updateEntity.setMeta(md);
 

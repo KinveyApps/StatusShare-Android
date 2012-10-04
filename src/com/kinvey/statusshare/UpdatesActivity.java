@@ -21,7 +21,7 @@
  * Author: Tom Giesberg
  */
 
-package com.kinvey.kinveygram;
+package com.kinvey.statusshare;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,8 +66,8 @@ public class UpdatesActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.updates);
-        mSharedClient = ((KinveyGramApp) getApplication()).getKinveyService();
-        mCalendar = ((KinveyGramApp) getApplication()).getAppCalendar();
+        mSharedClient = ((StatusShareApp) getApplication()).getKinveyService();
+        mCalendar = ((StatusShareApp) getApplication()).getAppCalendar();
     }
 
     @Override
