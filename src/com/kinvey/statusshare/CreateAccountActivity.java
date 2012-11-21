@@ -106,7 +106,6 @@ public class CreateAccountActivity extends LoginActivity {
 
     @Override
     public void submit(View view) {
-        try {
             mSharedClient.createUserWithUsername(mEditUserName.getText().toString(), mEditPassword.getText().toString(), new KinveyCallback<KinveyUser>() {
                 public void onFailure(Throwable t) {
                     CharSequence text = "Username already exists. Please try again.";
@@ -122,9 +121,6 @@ public class CreateAccountActivity extends LoginActivity {
 
             });
 
-        } catch (com.kinvey.exception.KinveyException e) {
-            e.printStackTrace();
-        }
     }
 
     public void goToLogin(View view) {
