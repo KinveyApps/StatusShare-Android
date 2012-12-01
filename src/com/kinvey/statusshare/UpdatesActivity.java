@@ -25,7 +25,6 @@ package com.kinvey.statusshare;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -34,9 +33,14 @@ import java.util.TreeMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -44,7 +48,9 @@ import android.widget.ListView;
 
 import com.kinvey.KCSClient;
 import com.kinvey.KinveyUser;
-import com.kinvey.exception.KinveyException;
+import com.kinvey.MappedAppdata;
+import com.kinvey.persistence.query.SimpleQuery;
+import com.kinvey.util.KinveyCallback;
 import com.kinvey.util.ListCallback;
 
 public class UpdatesActivity extends Activity {
@@ -54,6 +60,9 @@ public class UpdatesActivity extends Activity {
     private Calendar mCalendar;
     private Map<String, Friend> mFriends;
     private List<Update> mUpdates;
+
+	private View mUpdateStatusView;
+	private View mUpdateMainListView;
 
     static final Comparator<Update> LATEST_FIRST_ORDER = new Comparator<Update>() {
         public int compare(Update u1, Update u2) {
@@ -68,6 +77,9 @@ public class UpdatesActivity extends Activity {
         setContentView(R.layout.updates);
         mSharedClient = ((StatusShareApp) getApplication()).getKinveyService();
         mCalendar = ((StatusShareApp) getApplication()).getAppCalendar();
+        
+        mUpdateStatusView = findViewById(R.id.update_status);
+        mUpdateMainListView = findViewById(R.id.mainLayout);
     }
 
     @Override
@@ -101,11 +113,21 @@ public class UpdatesActivity extends Activity {
                     //android.util.Log.d(TAG, "friend : " + friend.getId() + ", " + friend.getUserName()  + ", " + user);
                     mFriends.put(friend.getId(), friend);
                 }
+                
+//        		final ProgressDialog progressDialog = ProgressDialog.show(
+//        				UpdatesActivity.this, "Downloading updates",
+//        				"Getting updates - just a moment");
 
-                mSharedClient.mappeddata("Updates").fetch(UpdateEntity.class, new ListCallback<UpdateEntity>() {
+                showProgress(true);
+                MappedAppdata updates = mSharedClient.mappeddata(UpdateEntity.class, "Updates");
+                SimpleQuery query = new SimpleQuery();
+                query.orderByDescending("_kmd.lmt");
+                updates.setQuery(query);
+				updates.fetch(UpdateEntity.class, new ListCallback<UpdateEntity>() {
                     @Override
                     public void onFailure(Throwable t) {
                         android.util.Log.w(TAG, "Error fetching updates data: " + t.getMessage());
+                        showProgress(false);
                     }
 
                     @Override
@@ -113,24 +135,28 @@ public class UpdatesActivity extends Activity {
                         //android.util.Log.d(TAG, "Count of updates found: " + updateEntities.size());
 
                         for (UpdateEntity updateEntity : updateEntities) {
-                            Update update = new Update(updateEntity.getText(), updateEntity.getMeta(), mFriends, mCalendar);
+                            final Update update = new Update(updateEntity.getText(), updateEntity.getMeta(), mFriends, mCalendar);
                             try {
                                 JSONObject attachment = updateEntity.getAttachment();
                                 if (attachment != null && attachment.getString("_loc") != null) {
                                     //android.util.Log.d(TAG, "_loc: " + attachment.getString("_loc"));
-                                    String uri =  mSharedClient.resource(attachment.getString("_loc")).getUriForResource();
-                                    //android.util.Log.d(TAG, "uri: " + uri);
-                                    update.setThumbnail(uri);
+                                    mSharedClient.resource(attachment.getString("_loc")).getUriForResource(new KinveyCallback<String>() {
+										
+										@Override
+										public void onSuccess(String uri) {
+											//android.util.Log.d(TAG, "uri: " + uri);
+		                                    update.setThumbnail(uri);
+										}
+									});
+                                    
                                 }
                             } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (KinveyException e) {
-                                e.printStackTrace();
+                                Log.e(TAG,"downloading resources for updates", e);
                             }
                             mUpdates.add(update);
                         }
 
-                        Collections.sort(mUpdates, LATEST_FIRST_ORDER);
+//                        Collections.sort(mUpdates, LATEST_FIRST_ORDER);
 
                         lv.setAdapter(new UpdateAdapter(UpdatesActivity.this, mUpdates));
                         lv.setOnItemClickListener(new OnItemClickListener() {
@@ -142,7 +168,10 @@ public class UpdatesActivity extends Activity {
                                 UpdatesActivity.this.startActivity(newIntent);
                             }
                         });
-
+//                        
+//                        if (progressDialog != null && progressDialog.isShowing())
+//                        	progressDialog.dismiss();
+                        showProgress(false);
                     }
 
                 });
@@ -154,7 +183,7 @@ public class UpdatesActivity extends Activity {
     }
 
     public void tryToLogout(View view) {
-        mSharedClient.getCurrentUser().logout();
+        mSharedClient.getActiveUser().logout();
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
@@ -163,4 +192,45 @@ public class UpdatesActivity extends Activity {
         startActivity(new Intent(this, WriteUpdateActivity.class));
     }
 
+	/**
+	 * Shows the progress UI and hides the login form.
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	private void showProgress(final boolean show) {
+		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+		// for very easy animations. If available, use these APIs to fade-in
+		// the progress spinner.
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+			int shortAnimTime = getResources().getInteger(
+					android.R.integer.config_shortAnimTime);
+
+			mUpdateStatusView.setVisibility(View.VISIBLE);
+			mUpdateStatusView.animate().setDuration(shortAnimTime)
+					.alpha(show ? 1 : 0)
+					.setListener(new AnimatorListenerAdapter() {
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							mUpdateStatusView.setVisibility(show ? View.VISIBLE
+									: View.GONE);
+						}
+					});
+
+			mUpdateMainListView.setVisibility(View.VISIBLE);
+			mUpdateMainListView.animate().setDuration(shortAnimTime)
+					.alpha(show ? 0 : 1)
+					.setListener(new AnimatorListenerAdapter() {
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							mUpdateMainListView.setVisibility(show ? View.GONE
+									: View.VISIBLE);
+						}
+					});
+		} else {
+			// The ViewPropertyAnimator APIs are not available, so simply show
+			// and hide the relevant UI components.
+			mUpdateStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+			mUpdateMainListView.setVisibility(show ? View.GONE : View.VISIBLE);
+		}
+	}
+    
 }

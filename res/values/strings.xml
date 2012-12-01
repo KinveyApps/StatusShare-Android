@@ -22,4 +22,5 @@ Author: Tom Giesberg -->
 
 <resources>
     <string name="app_name">StatusShare</string>
+    <string name="update_progress_download">Loading updates</string>
 </resources>

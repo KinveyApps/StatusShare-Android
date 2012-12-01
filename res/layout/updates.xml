@@ -20,48 +20,79 @@ under the License.
 
 Author: Tom Giesberg -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mainLayout"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/grid_blank">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".LoginActivity" >
 
-    <RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#aa000000"
-        android:padding="5sp">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="tryToLogout"
-            android:text="Logout" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:textSize="20sp"
-            android:text="Latest Updates" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:onClick="tryToWriteUpdate"
-            android:text="+" />
-    </RelativeLayout>
+    <!-- Login progress -->
 
     <LinearLayout
-        style="@style/RoundedLayout"
+        android:id="@+id/update_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:layout_height="fill_parent">
-        <ListView
-            android:id="@+id/updateList"
-            android:layout_width="fill_parent"
+        android:visibility="gone">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:cacheColorHint="#00000000"/>
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/update_status_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+        	android:text="@string/update_progress_download"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
-</LinearLayout>
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/mainLayout"
+	    android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:background="@drawable/grid_blank">
+	
+	    <RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:background="#aa000000"
+	        android:padding="5sp">
+	        <Button
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:onClick="tryToLogout"
+	            android:text="Logout" />
+	        <TextView
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_centerHorizontal="true"
+	            android:layout_centerVertical="true"
+	            android:textSize="20sp"
+	            android:text="Latest Updates" />
+	        <Button
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentRight="true"
+	            android:onClick="tryToWriteUpdate"
+	            android:text="+" />
+	    </RelativeLayout>
+	
+	    <LinearLayout
+	        style="@style/RoundedLayout"
+	        android:orientation="vertical"
+	        android:layout_height="fill_parent">
+	        <ListView
+	            android:id="@+id/updateList"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:cacheColorHint="#00000000"/>
+	    </LinearLayout>
+	
+	</LinearLayout>
 
+</merge>

@@ -24,13 +24,16 @@
 package com.kinvey.statusshare;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -46,7 +49,12 @@ public class LoginActivity extends Activity {
     protected static final int MIN_USERNAME_LENGTH = 4;
     protected static final int MIN_PASSWORD_LENGTH = 4;
 
-    protected KCSClient mSharedClient;
+	private static final String USER_DETAILS = "userdetails";
+	private static final String SIGNED_IN_PREF = "signedIn";
+	private static final String PASS_PREF = "passwd";
+	private static final String USERNAME_PREF = "username";
+
+    protected KCSClient mKinveyClient;
     protected Button mButtonSubmit;
     protected EditText mEditUserName;
     protected EditText mEditPassword;
@@ -55,7 +63,7 @@ public class LoginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSharedClient = ((StatusShareApp) getApplication()).getKinveyService();
+        mKinveyClient = ((StatusShareApp) getApplication()).getKinveyService();
         createContent();
         addEditListeners();
     }
@@ -136,6 +144,26 @@ public class LoginActivity extends Activity {
                 return false;
             }
         });
+        
+        SharedPreferences userdetails = getSharedPreferences(USER_DETAILS, MODE_PRIVATE);
+        boolean hasSignedIn = userdetails.getBoolean(SIGNED_IN_PREF, false);
+        if (hasSignedIn){
+            String username = userdetails.getString(USERNAME_PREF, "unknown");
+            String pass = userdetails.getString(PASS_PREF, "unknown");
+            mKinveyClient.loginWithUsername(username, pass, new KinveyCallback<KinveyUser>(){
+                @Override
+                public void onFailure(Throwable t) {
+                    Log.e(TAG, "failed to log in to kinvey", t);
+                }
+                @Override
+                public void onSuccess(KinveyUser arg0) {
+                    Log.d(TAG, "logged into kinvey");
+                    startUpdateActivity();
+                }
+            });
+        } else {
+        	findViewById(R.id.login_main).setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -146,7 +174,7 @@ public class LoginActivity extends Activity {
     }
 
     public void submit(View view) {
-        mSharedClient.loginWithUsername(mEditUserName.getText().toString(), mEditPassword.getText().toString(), new KinveyCallback<KinveyUser>() {
+        mKinveyClient.loginWithUsername(mEditUserName.getText().toString(), mEditPassword.getText().toString(), new KinveyCallback<KinveyUser>() {
             public void onFailure(Throwable t) {
                 CharSequence text = "Wrong username or password. Please check and try again.";
                 Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
@@ -155,8 +183,8 @@ public class LoginActivity extends Activity {
             public void onSuccess(KinveyUser u) {
                 CharSequence text = "Welcome back," + u.getUsername() + ".";
                 Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-                LoginActivity.this.startActivity(new Intent(LoginActivity.this, UpdatesActivity.class));
-                LoginActivity.this.finish();
+                startUpdateActivity();
+                saveKinveyLoginDetails(u);
             }
 
         });
@@ -165,5 +193,19 @@ public class LoginActivity extends Activity {
     public void goToCreateAccount(View view) {
         startActivity(new Intent(LoginActivity.this, CreateAccountActivity.class));
         finish();
+    }
+
+    private void startUpdateActivity() {
+    	LoginActivity.this.startActivity(new Intent(LoginActivity.this, UpdatesActivity.class));
+    	LoginActivity.this.finish();
+    }
+
+    private void saveKinveyLoginDetails(KinveyUser u) {
+        SharedPreferences userdetails = getSharedPreferences(USER_DETAILS, Application.MODE_PRIVATE);
+        SharedPreferences.Editor userDetailsEdit = userdetails.edit();
+        userDetailsEdit.putBoolean(SIGNED_IN_PREF, true);
+        userDetailsEdit.putString(PASS_PREF, u.getPassword());
+        userDetailsEdit.putString(USERNAME_PREF, u.getUsername());
+        userDetailsEdit.commit();
     }
 }

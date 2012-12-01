@@ -106,7 +106,7 @@ public class CreateAccountActivity extends LoginActivity {
 
     @Override
     public void submit(View view) {
-            mSharedClient.createUserWithUsername(mEditUserName.getText().toString(), mEditPassword.getText().toString(), new KinveyCallback<KinveyUser>() {
+            mKinveyClient.createUserWithUsername(mEditUserName.getText().toString(), mEditPassword.getText().toString(), new KinveyCallback<KinveyUser>() {
                 public void onFailure(Throwable t) {
                     CharSequence text = "Username already exists. Please try again.";
                     Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();

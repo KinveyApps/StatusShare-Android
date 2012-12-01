@@ -35,6 +35,7 @@ import java.util.Map;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 
 import com.kinvey.KinveyMetadata;
 
@@ -118,34 +119,7 @@ public class Update {
     }
     public void setThumbnail(String url) {
         thumbnail = null;
-        try {
-            BitmapFactory.Options opts = new BitmapFactory.Options();
-            opts.inJustDecodeBounds = true;
-
-            int scaleFactor = 0;
-            do {
-                opts.inSampleSize = (int) Math.pow(2, scaleFactor++);
-                BitmapFactory.decodeStream((InputStream) new URL(url).getContent(), null, opts);
-                android.util.Log.d(TAG, "opts.inSampleSize: " + opts.inSampleSize + ", opts.outWidth: " + opts.outWidth);
-            } while(opts.outWidth > MAX_W || opts.outHeight > MAX_H);
-
-/**
-            BitmapFactory.decodeStream((InputStream) new URL(url).getContent(), null, opts);
-            android.util.Log.d(TAG, "opts.outHeight: " + opts.outHeight + ", opts.outWidth: " + opts.outWidth);
-            if(opts.outWidth > MAX_W || opts.outHeight > MAX_H) {
-                opts.inSampleSize = (int) (opts.outWidth / MAX_W > opts.outHeight / MAX_H ? opts.outWidth / MAX_W : opts.outHeight / MAX_H) + 1;
-            }
-            android.util.Log.d(TAG, "opts.inSampleSize: " + opts.inSampleSize);
-**/
-
-            opts.inJustDecodeBounds = false;
-            thumbnail = BitmapFactory.decodeStream((InputStream) new URL(url).getContent(), null, opts);
-            android.util.Log.d(TAG, "opts.outWidth: " + opts.outWidth + ", size: " + thumbnail.getHeight() + " x " + thumbnail.getWidth());
-       } catch (MalformedURLException e) {
-           e.printStackTrace();
-       } catch (IOException e) {
-           e.printStackTrace();
-       }
+        new GetThumbnailTask().execute(url);
     }
 
     public Date getDate() { return date; }
@@ -154,4 +128,33 @@ public class Update {
         ParsePosition pp = new ParsePosition(0);
         date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse(d, pp);
     }
+    
+	private class GetThumbnailTask extends AsyncTask<String, Integer, Long> {
+
+		@Override
+		protected Long doInBackground(String... params) {
+	        try {
+	            BitmapFactory.Options opts = new BitmapFactory.Options();
+	            opts.inJustDecodeBounds = true;
+
+	            int scaleFactor = 0;
+	            String url = params[0];
+	            do {
+	                opts.inSampleSize = (int) Math.pow(2, scaleFactor++);
+					BitmapFactory.decodeStream((InputStream) new URL(url).getContent(), null, opts);
+	                android.util.Log.d(TAG, "opts.inSampleSize: " + opts.inSampleSize + ", opts.outWidth: " + opts.outWidth);
+	            } while(opts.outWidth > MAX_W || opts.outHeight > MAX_H);
+
+	            opts.inJustDecodeBounds = false;
+	            thumbnail = BitmapFactory.decodeStream((InputStream) new URL(url).getContent(), null, opts);
+	            android.util.Log.d(TAG, "opts.outWidth: " + opts.outWidth + ", size: " + thumbnail.getHeight() + " x " + thumbnail.getWidth());
+	       } catch (MalformedURLException e) {
+	           e.printStackTrace();
+	       } catch (IOException e) {
+	           e.printStackTrace();
+	       }
+	       return null;
+		}
+
+	}
 }

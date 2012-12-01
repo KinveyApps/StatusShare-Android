@@ -23,8 +23,8 @@
 
 package com.kinvey.statusshare;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -32,6 +32,8 @@ import java.security.NoSuchAlgorithmException;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Log;
 
 public class Friend {
 
@@ -73,14 +75,30 @@ public class Friend {
 
             String url = new String("http://www.gravatar.com/avatar/" + sb.toString() + ".jpg?d=identicon");
             //android.util.Log.d(TAG, gravatarID + " = " + url);
-            avatar = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            new DownloadAvatarTask().execute(url);
+       } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }
 
+    private static final String TAG = Friend.class.getSimpleName();
+    
+	private class DownloadAvatarTask extends AsyncTask<String, Integer, Long> {
+
+		@Override
+		protected Long doInBackground(String... params) {
+			try {
+				avatar = BitmapFactory.decodeStream((InputStream) new URL(
+						params[0]).getContent());
+			} catch (MalformedURLException e) {
+				Log.e(TAG, "url for avatar download is bad", e);
+			} catch (IOException e) {
+				Log.e(TAG, "failed to download avatar", e);
+			}
+
+			return null;
+		}
+
+	}
+    
 }
