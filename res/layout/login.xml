@@ -24,8 +24,7 @@ Author: Tom Giesberg -->
     android:id="@+id/login_main"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/grid_blank"
-    android:visibility="gone">
+    android:background="@drawable/grid_blank">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"

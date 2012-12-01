@@ -37,7 +37,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -184,7 +186,9 @@ public class UpdatesActivity extends Activity {
 
     public void tryToLogout(View view) {
         mSharedClient.getActiveUser().logout();
-        startActivity(new Intent(this, LoginActivity.class));
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra(LoginActivity.LOGGED_OUT, true);
+        startActivity(intent);
         finish();
     }
 

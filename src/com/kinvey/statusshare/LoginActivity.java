@@ -53,6 +53,7 @@ public class LoginActivity extends Activity {
 	private static final String SIGNED_IN_PREF = "signedIn";
 	private static final String PASS_PREF = "passwd";
 	private static final String USERNAME_PREF = "username";
+	public static final String LOGGED_OUT = "loggedOut";
 
     protected KCSClient mKinveyClient;
     protected Button mButtonSubmit;
@@ -63,9 +64,34 @@ public class LoginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        if (intent != null && intent.getExtras() != null && intent.getExtras().getBoolean(LOGGED_OUT)) {
+        	Log.d(TAG, "fogetting user");
+        	forgetUserAndLogout();
+        }
+        
         mKinveyClient = ((StatusShareApp) getApplication()).getKinveyService();
-        createContent();
-        addEditListeners();
+        
+        SharedPreferences userdetails = getSharedPreferences(USER_DETAILS, MODE_PRIVATE);
+        boolean hasSignedIn = userdetails.getBoolean(SIGNED_IN_PREF, false);
+        if (hasSignedIn){
+            String username = userdetails.getString(USERNAME_PREF, "unknown");
+            String pass = userdetails.getString(PASS_PREF, "unknown");
+            mKinveyClient.loginWithUsername(username, pass, new KinveyCallback<KinveyUser>(){
+                @Override
+                public void onFailure(Throwable t) {
+                    Log.e(TAG, "failed to log in to kinvey", t);
+                }
+                @Override
+                public void onSuccess(KinveyUser arg0) {
+                    Log.d(TAG, "logged into kinvey");
+                    startUpdateActivity();
+                }
+            });
+        } else {    
+	        createContent();        
+	        addEditListeners();
+	    }
     }
 
     public void createContent() {
@@ -145,25 +171,7 @@ public class LoginActivity extends Activity {
             }
         });
         
-        SharedPreferences userdetails = getSharedPreferences(USER_DETAILS, MODE_PRIVATE);
-        boolean hasSignedIn = userdetails.getBoolean(SIGNED_IN_PREF, false);
-        if (hasSignedIn){
-            String username = userdetails.getString(USERNAME_PREF, "unknown");
-            String pass = userdetails.getString(PASS_PREF, "unknown");
-            mKinveyClient.loginWithUsername(username, pass, new KinveyCallback<KinveyUser>(){
-                @Override
-                public void onFailure(Throwable t) {
-                    Log.e(TAG, "failed to log in to kinvey", t);
-                }
-                @Override
-                public void onSuccess(KinveyUser arg0) {
-                    Log.d(TAG, "logged into kinvey");
-                    startUpdateActivity();
-                }
-            });
-        } else {
-        	findViewById(R.id.login_main).setVisibility(View.VISIBLE);
-        }
+
 
     }
 
@@ -200,6 +208,15 @@ public class LoginActivity extends Activity {
     	LoginActivity.this.finish();
     }
 
+    private void forgetUserAndLogout() {
+        SharedPreferences userdetails = getSharedPreferences(USER_DETAILS, Application.MODE_PRIVATE);
+        SharedPreferences.Editor userDetailsEdit = userdetails.edit();
+        userDetailsEdit.putBoolean(SIGNED_IN_PREF, false);
+        userDetailsEdit.putString(PASS_PREF, null);
+        userDetailsEdit.putString(USERNAME_PREF, null);
+        userDetailsEdit.commit();
+    }
+    
     private void saveKinveyLoginDetails(KinveyUser u) {
         SharedPreferences userdetails = getSharedPreferences(USER_DETAILS, Application.MODE_PRIVATE);
         SharedPreferences.Editor userDetailsEdit = userdetails.edit();
