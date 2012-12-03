@@ -62,11 +62,6 @@ Author: Tom Giesberg -->
 	        android:layout_height="wrap_content"
 	        android:background="#aa000000"
 	        android:padding="5sp">
-	        <Button
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:onClick="tryToLogout"
-	            android:text="Logout" />
 	        <TextView
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"

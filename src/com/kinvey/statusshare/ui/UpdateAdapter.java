@@ -21,11 +21,9 @@
  * Author: Tom Giesberg
  */
 
-package com.kinvey.statusshare;
+package com.kinvey.statusshare.ui;
 
 import java.util.List;
-
-import com.kinvey.statusshare.model.Update;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -35,6 +33,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kinvey.statusshare.R;
+import com.kinvey.statusshare.model.Update;
+
 public class UpdateAdapter extends ArrayAdapter<Update> {
     public static final String TAG = UpdateAdapter.class.getSimpleName();
 
@@ -43,7 +44,7 @@ public class UpdateAdapter extends ArrayAdapter<Update> {
 
     public UpdateAdapter(Activity activity, List<Update> objects) {
         super(activity, R.layout.update_list_item , objects);
-        //android.util.Log.d(TAG, "UpdateAdapter::constructor");
+//        android.util.Log.d(TAG, "UpdateAdapter::constructor");
         this.activity = activity;
         this.updates = objects;
     }
@@ -82,7 +83,7 @@ public class UpdateAdapter extends ArrayAdapter<Update> {
         updateView.author.setText(currentUpdate.getAuthorName());
         updateView.when.setText(currentUpdate.getSince());
         updateView.attachment.setImageBitmap(currentUpdate.getThumbnail());
-        //android.util.Log.d(TAG, "ua.java" + currentUpdate.getThumbnail().getHeight() + " x " + currentUpdate.getThumbnail().getWidth());
+//        android.util.Log.d(TAG, "ua.java" + currentUpdate.getThumbnail().getHeight() + " x " + currentUpdate.getThumbnail().getWidth());
         return rowView;
     }
 

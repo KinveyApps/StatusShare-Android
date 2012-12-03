@@ -43,8 +43,8 @@ public class StatusShareApp extends Application {
     private Calendar appCalendar;
 
     // Enter your Kinvey app credentials
-    private static final String APP_KEY = your_app_key;
-    private static final String APP_SECRET = your_app_secret;
+    private static final String APP_KEY = "kid2338";
+    private static final String APP_SECRET = "f5cd03e2bb334b4887f73849cdedb78b";
 
     @Override
     public void onCreate() {

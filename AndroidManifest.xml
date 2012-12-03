@@ -29,21 +29,22 @@ Author: Tom Giesberg -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <application android:icon="@drawable/icon"
-                 android:label="@string/app_name"
-                 android:name=".StatusShareApp"
-                 android:theme="@android:style/Theme.NoTitleBar">
-        <activity android:name="MainActivity"
+    <application 
+			android:icon="@drawable/icon"
+			android:label="@string/app_name"
+			android:name=".StatusShareApp"
+			android:theme="@android:style/Theme.NoTitleBar">
+        <activity android:name="com.kinvey.statusshare.ui.MainActivity"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="AuthorViewActivity"/>
-        <activity android:name="CreateAccountActivity"/>
-        <activity android:name="LoginActivity"/>
-        <activity android:name="UpdatesActivity"/>
-        <activity android:name="WriteUpdateActivity"/>
+        <activity android:name="com.kinvey.statusshare.ui.AuthorViewActivity"/>
+        <activity android:name="com.kinvey.statusshare.ui.CreateAccountActivity"/>
+        <activity android:name="com.kinvey.statusshare.ui.LoginActivity"/>
+        <activity android:name="com.kinvey.statusshare.ui.UpdatesActivity"/>
+        <activity android:name="com.kinvey.statusshare.ui.WriteUpdateActivity"/>
     </application>
 </manifest>
