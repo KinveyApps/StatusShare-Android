@@ -31,6 +31,7 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 import android.graphics.Bitmap;
@@ -126,7 +127,7 @@ public class Update {
     public void setDate(Date d) { date = d; }
     public void setDate(String d) {
         ParsePosition pp = new ParsePosition(0);
-        date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse(d, pp);
+        date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.US).parse(d, pp);
     }
     
 	private class GetThumbnailTask extends AsyncTask<String, Integer, Long> {

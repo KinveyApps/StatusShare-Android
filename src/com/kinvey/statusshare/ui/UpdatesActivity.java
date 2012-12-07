@@ -127,7 +127,7 @@ public class UpdatesActivity extends Activity {
                 SimpleQuery query = new SimpleQuery();
                 query.orderByDescending("_kmd.lmt");
                 updates.setQuery(query);
-				updates.fetch(UpdateEntity.class, new ListCallback<UpdateEntity>() {
+				updates.fetch(new ListCallback<UpdateEntity>() {
                     @Override
                     public void onFailure(Throwable t) {
                         android.util.Log.w(TAG, "Error fetching updates data: " + t.getMessage());
