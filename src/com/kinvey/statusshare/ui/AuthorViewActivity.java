@@ -38,11 +38,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.kinvey.KCSClient;
+import com.kinvey.MappedAppdata;
+import com.kinvey.exception.KinveyException;
+import com.kinvey.persistence.query.SimpleQuery;
 import com.kinvey.statusshare.R;
 import com.kinvey.statusshare.StatusShareApp;
 import com.kinvey.statusshare.model.Friend;
 import com.kinvey.statusshare.model.Update;
 import com.kinvey.statusshare.model.UpdateEntity;
+import com.kinvey.util.ListCallback;
 
 public class AuthorViewActivity extends Activity {
     public static final String TAG = AuthorViewActivity.class.getSimpleName();

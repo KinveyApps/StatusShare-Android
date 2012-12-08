@@ -48,9 +48,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.kinvey.KCSClient;
+import com.kinvey.KinveyMetadata;
+import com.kinvey.KinveyResource;
 import com.kinvey.statusshare.R;
 import com.kinvey.statusshare.StatusShareApp;
 import com.kinvey.statusshare.model.UpdateEntity;
+import com.kinvey.util.KinveyCallback;
+import com.kinvey.util.ScalarCallback;
 
 public class WriteUpdateActivity extends Activity {
     public static final String TAG = WriteUpdateActivity.class.getSimpleName();

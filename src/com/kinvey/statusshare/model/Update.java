@@ -37,6 +37,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
+import com.kinvey.KinveyMetadata;
+
 
 /**
  * Stores information for syncing with Kinvey backend.

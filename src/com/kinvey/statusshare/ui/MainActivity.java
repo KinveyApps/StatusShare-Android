@@ -28,8 +28,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.kinvey.KCSClient;
 import com.kinvey.statusshare.R;
 import com.kinvey.statusshare.StatusShareApp;
+import com.kinvey.util.KinveyCallback;
 
 public class MainActivity extends Activity {
     public static final String TAG = MainActivity.class.getSimpleName();

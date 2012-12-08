@@ -28,6 +28,9 @@ import java.util.TimeZone;
 
 import android.app.Application;
 
+import com.kinvey.KCSClient;
+import com.kinvey.KinveySettings;
+
 /**
  * Store global state. In this case, the single instance of KCS.
  *

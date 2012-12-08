@@ -28,6 +28,10 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import com.kinvey.KinveyMetadata;
+import com.kinvey.persistence.mapping.MappedEntity;
+import com.kinvey.persistence.mapping.MappedField;
+
 /**
  * Stores information for syncing with Kinvey backend.
  *

@@ -34,17 +34,17 @@ Author: Tom Giesberg -->
 			android:label="@string/app_name"
 			android:name=".StatusShareApp"
 			android:theme="@android:style/Theme.NoTitleBar">
-        <activity android:name="com.kinvey.statusshare.ui.MainActivity"
+        <activity android:name=".ui.MainActivity"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.kinvey.statusshare.ui.AuthorViewActivity"/>
-        <activity android:name="com.kinvey.statusshare.ui.CreateAccountActivity"/>
-        <activity android:name="com.kinvey.statusshare.ui.LoginActivity"/>
-        <activity android:name="com.kinvey.statusshare.ui.UpdatesActivity"/>
-        <activity android:name="com.kinvey.statusshare.ui.WriteUpdateActivity"/>
+        <activity android:name=".ui.AuthorViewActivity"/>
+        <activity android:name=".ui.CreateAccountActivity"/>
+        <activity android:name=".ui.LoginActivity"/>
+        <activity android:name=".ui.UpdatesActivity"/>
+        <activity android:name=".ui.WriteUpdateActivity"/>
     </application>
 </manifest>

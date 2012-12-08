@@ -35,7 +35,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kinvey.KinveyUser;
 import com.kinvey.statusshare.R;
+import com.kinvey.util.KinveyCallback;
 
 public class CreateAccountActivity extends LoginActivity {
     public static final String TAG = CreateAccountActivity.class.getSimpleName();
