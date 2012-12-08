@@ -33,19 +33,18 @@ import java.util.TreeMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.kinvey.KCSClient;
@@ -68,9 +67,6 @@ public class UpdatesActivity extends Activity {
     private Map<String, Friend> mFriends;
     private List<Update> mUpdates;
 
-	private View mUpdateStatusView;
-	private View mUpdateMainListView;
-
     static final Comparator<Update> LATEST_FIRST_ORDER = new Comparator<Update>() {
         public int compare(Update u1, Update u2) {
             return u2.getDate().compareTo(u1.getDate());
@@ -85,8 +81,7 @@ public class UpdatesActivity extends Activity {
         mSharedClient = ((StatusShareApp) getApplication()).getKinveyService();
         mCalendar = ((StatusShareApp) getApplication()).getAppCalendar();
         
-        mUpdateStatusView = findViewById(R.id.update_status);
-        mUpdateMainListView = findViewById(R.id.updatesMain);
+        
     }
 
     @Override
@@ -120,9 +115,7 @@ public class UpdatesActivity extends Activity {
                     //android.util.Log.d(TAG, "friend : " + friend.getId() + ", " + friend.getUserName()  + ", " + user);
                     mFriends.put(friend.getId(), friend);
                 }
-                
-                showProgress(true);
-                
+
                 MappedAppdata updates = mSharedClient.mappeddata(UpdateEntity.class, "Updates");
                 SimpleQuery query = new SimpleQuery();
                 query.orderByDescending("_kmd.lmt");
@@ -174,12 +167,19 @@ public class UpdatesActivity extends Activity {
                         showProgress(false);
                     }
 
+
                 });
 
             }
 
         });
 
+    }
+
+    
+    private void showProgress(boolean show) {
+    	findViewById(R.id.listProgress).setVisibility(show ? View.VISIBLE : View.GONE);
+    	findViewById(R.id.updateList).setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
     public void tryToLogout(View view) {
@@ -191,6 +191,7 @@ public class UpdatesActivity extends Activity {
     }
 
     public void tryToWriteUpdate(View view) {
+    	Log.d(TAG, "send click");
         startActivity(new Intent(this, WriteUpdateActivity.class));
     }
 
@@ -216,45 +217,5 @@ public class UpdatesActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-    /**
-	 * Shows the progress UI and hides the login form.
-	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-	private void showProgress(final boolean show) {
-		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-		// for very easy animations. If available, use these APIs to fade-in
-		// the progress spinner.
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-			int shortAnimTime = getResources().getInteger(
-					android.R.integer.config_shortAnimTime);
-
-			mUpdateStatusView.setVisibility(View.VISIBLE);
-			mUpdateStatusView.animate().setDuration(shortAnimTime)
-					.alpha(show ? 1 : 0)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mUpdateStatusView.setVisibility(show ? View.VISIBLE
-									: View.GONE);
-						}
-					});
-
-			mUpdateMainListView.setVisibility(View.VISIBLE);
-			mUpdateMainListView.animate().setDuration(shortAnimTime)
-					.alpha(show ? 0 : 1)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mUpdateMainListView.setVisibility(show ? View.GONE
-									: View.VISIBLE);
-						}
-					});
-		} else {
-			// The ViewPropertyAnimator APIs are not available, so simply show
-			// and hide the relevant UI components.
-			mUpdateStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-			mUpdateMainListView.setVisibility(show ? View.GONE : View.VISIBLE);
-		}
-	}
     
 }

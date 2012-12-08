@@ -30,4 +30,7 @@ Author: Tom Giesberg -->
     
     <string name="desc_avatar">avatar</string>    
     <string name="desc_picture">picture</string>
+    
+    <string name="post_update">post update</string>
+    <string name="latest_updates">latest updates</string>
 </resources>
