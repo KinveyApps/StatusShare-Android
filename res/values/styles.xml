@@ -28,7 +28,7 @@ Author: Tom Giesberg -->
         <item name="android:textColor">#ffffff</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_margin">3dp</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:shadowColor">#000000</item>
         <item name="android:shadowDx">1</item>
@@ -47,4 +47,17 @@ Author: Tom Giesberg -->
         <item name="android:shadowRadius">5</item>
     </style>
 
+    
+    <style name="Progress">
+        <item name="android:indeterminate">true</item>
+        <item name="android:indeterminateDrawable">@drawable/spinner</item>
+        <item name="android:indeterminateDuration">2000</item>
+        <item name="android:indeterminateOnly">true</item>
+    </style>
+
+    <style name="ListProgress" parent="Progress">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+    </style>
+    
 </resources>

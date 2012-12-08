@@ -33,29 +33,24 @@ Author: Tom Giesberg -->
         android:layout_gravity="center"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:background="@android:color/transparent"
+        android:visibility="gone" >
 
         <ProgressBar
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        	android:layout_height="wrap_content"
             android:layout_marginBottom="8dp" />
 
-        <TextView
-            android:id="@+id/update_status_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-        	android:text="@string/update_progress_download"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:id="@+id/mainLayout"
-	    android:orientation="vertical"
+	<LinearLayout
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/updatesMain"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
-	    android:background="@drawable/grid_blank">
+	    android:background="@color/white"
+	    android:orientation="vertical" >
 	
 	    <RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
 	        android:layout_width="fill_parent"
@@ -77,16 +72,12 @@ Author: Tom Giesberg -->
 	            android:text="+" />
 	    </RelativeLayout>
 	
-	    <LinearLayout
-	        style="@style/RoundedLayout"
-	        android:orientation="vertical"
-	        android:layout_height="fill_parent">
+
 	        <ListView
 	            android:id="@+id/updateList"
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
 	            android:cacheColorHint="#00000000"/>
-	    </LinearLayout>
 	
 	</LinearLayout>
 

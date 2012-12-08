@@ -48,17 +48,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.kinvey.KCSClient;
-import com.kinvey.KinveyUser;
-import com.kinvey.MappedAppdata;
-import com.kinvey.persistence.query.SimpleQuery;
 import com.kinvey.statusshare.R;
 import com.kinvey.statusshare.StatusShareApp;
 import com.kinvey.statusshare.model.Friend;
 import com.kinvey.statusshare.model.Update;
 import com.kinvey.statusshare.model.UpdateEntity;
-import com.kinvey.util.KinveyCallback;
-import com.kinvey.util.ListCallback;
 
 public class UpdatesActivity extends Activity {
     public static final String TAG = UpdatesActivity.class.getSimpleName();
@@ -86,7 +80,7 @@ public class UpdatesActivity extends Activity {
         mCalendar = ((StatusShareApp) getApplication()).getAppCalendar();
         
         mUpdateStatusView = findViewById(R.id.update_status);
-        mUpdateMainListView = findViewById(R.id.mainLayout);
+        mUpdateMainListView = findViewById(R.id.updatesMain);
     }
 
     @Override
