@@ -36,7 +36,7 @@ Author: Tom Giesberg -->
         style="@style/ButtonText"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="60dp"
-        android:textColor="@color/kinveyOrange"
+        android:textColor="@color/splash_text"
         />
 </RelativeLayout>
 

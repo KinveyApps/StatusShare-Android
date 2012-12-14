@@ -20,8 +20,12 @@ under the License.
 
 Author: Tom Giesberg -->
 
-<resources>
-
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="Global">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+    
     <style name="ButtonText">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -59,5 +63,47 @@ Author: Tom Giesberg -->
         <item name="android:layout_width">64dp</item>
         <item name="android:layout_height">64dp</item>
     </style>
+
+
+    <style name="SubtitleText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_dark</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
     
-</resources>
+    <style name="TitleText">
+        <item name="android:textSize">17sp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+    
+    <style name="HeaderTitleText" parent="TitleText">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    
+    <style name="EditText" parent="Global">
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textCursorDrawable">@drawable/edit_text_cursor</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:background">@drawable/edit_text_background</item>
+    </style>
+    
+    <style name="LoginEditText" parent="Global">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:autoText">false</item>
+        <item name="android:capitalize">none</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    
+    <style name="LoginButton" parent="Global">
+    </style>
+ </resources>

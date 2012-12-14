@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -39,29 +40,98 @@ import com.kinvey.KinveyUser;
 import com.kinvey.statusshare.R;
 import com.kinvey.util.KinveyCallback;
 
-public class CreateAccountActivity extends LoginActivity {
+public class CreateAccountActivity extends BaseActivity {
     public static final String TAG = CreateAccountActivity.class.getSimpleName();
 
     private EditText mEditRepeatPassword;
+	private Button mButtonSubmit;
+	private EditText mEditUserName;
+	private EditText mEditPassword;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
 
-    @Override
-    public void createContent() {
         setContentView(R.layout.create_account);
-        mButtonSubmit = (Button) findViewById(R.id.submit);
-        mEditUserName = (EditText) findViewById(R.id.userName);
-        mEditPassword = (EditText) findViewById(R.id.password);
-        mEditRepeatPassword = (EditText) findViewById(R.id.repeatPassword);
+        mButtonSubmit = (Button) findViewById(R.id.create_account);
+        mEditUserName = (EditText) findViewById(R.id.et_login);
+        mEditPassword = (EditText) findViewById(R.id.et_password);
+        mEditRepeatPassword = (EditText) findViewById(R.id.confirm_password);
+        this.addEditListeners();
     }
 
-    @Override
-    public void addEditListeners() {
-        super.addEditListeners();
+
+    private void addEditListeners() {
+
+        mEditUserName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mButtonSubmit.setEnabled(validateInput());
+            }
+        });
+
+        mEditUserName.setOnEditorActionListener(
+                new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((actionId == EditorInfo.IME_ACTION_NEXT
+                    || actionId == EditorInfo.IME_ACTION_DONE
+                    || (event.getAction() == KeyEvent.ACTION_DOWN
+                        && event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+                    && mEditUserName.getText().length() < LoginActivity.MIN_USERNAME_LENGTH
+                    ) {
+
+                    CharSequence text = "User name must contain at least " + LoginActivity.MIN_USERNAME_LENGTH + " characters";
+                    Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        mEditPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mButtonSubmit.setEnabled(validateInput());
+            }
+        });
+
+        mEditPassword.setOnEditorActionListener(
+                new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((actionId == EditorInfo.IME_ACTION_NEXT
+                    || actionId == EditorInfo.IME_ACTION_DONE
+                    || (event.getAction() == KeyEvent.ACTION_DOWN
+                        && event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+                    && mEditPassword.getText().length() < LoginActivity.MIN_USERNAME_LENGTH
+                    ) {
+                    CharSequence text = "Password must contain at least " + LoginActivity.MIN_PASSWORD_LENGTH + " characters";
+                    Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
+    	
+    	
         mEditRepeatPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -85,10 +155,10 @@ public class CreateAccountActivity extends LoginActivity {
                     || actionId == EditorInfo.IME_ACTION_DONE
                     || (event.getAction() == KeyEvent.ACTION_DOWN
                         && event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
-                    && (mEditRepeatPassword.getText().length() < MIN_USERNAME_LENGTH
+                    && (mEditRepeatPassword.getText().length() < LoginActivity.MIN_USERNAME_LENGTH
                         || !mEditPassword.getText().toString().equals(mEditRepeatPassword.getText().toString())
                     )) {
-                    CharSequence text = "Repeat password must contain at least " + MIN_PASSWORD_LENGTH + " characters and equal password";
+                    CharSequence text = "Repeat password must contain at least " + LoginActivity.MIN_PASSWORD_LENGTH + " characters and equal password";
                     Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
                     return true;
                 }
@@ -97,26 +167,32 @@ public class CreateAccountActivity extends LoginActivity {
         });
     }
 
-    @Override
-    public boolean validateInput() {
-       return (mEditUserName.toString().length() >= MIN_USERNAME_LENGTH
-               && mEditPassword.getText().length() >= MIN_PASSWORD_LENGTH
-               && mEditRepeatPassword.getText().length() >= MIN_PASSWORD_LENGTH
+    private boolean validateInput() {
+       return (mEditUserName.toString().length() >= LoginActivity.MIN_USERNAME_LENGTH
+               && mEditPassword.getText().length() >= LoginActivity.MIN_PASSWORD_LENGTH
+               && mEditRepeatPassword.getText().length() >= LoginActivity.MIN_PASSWORD_LENGTH
                && mEditPassword.getText().toString().equals(mEditRepeatPassword.getText().toString()));
     }
 
     @Override
+    public void onBackPressed() {
+    	startActivity(new Intent(this, LoginActivity.class));
+    	super.onBackPressed();
+    }
+    
     public void submit(View view) {
             mKinveyClient.createUserWithUsername(mEditUserName.getText().toString(), mEditPassword.getText().toString(), new KinveyCallback<KinveyUser>() {
                 public void onFailure(Throwable t) {
-                    CharSequence text = "Username already exists. Please try again.";
-                    Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+                    CharSequence text = "Username already exists.";
+                    Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                    toast.show();
                 }
 
                 public void onSuccess(KinveyUser u) {
-                    CharSequence text = "Welcome," + u.getUsername() + ".";
-                    Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-                    CreateAccountActivity.this.startActivity(new Intent(CreateAccountActivity.this, UpdatesActivity.class));
+                    CharSequence text = "Welcome " + u.getUsername() + ".";
+                    Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+                    CreateAccountActivity.this.startActivity(new Intent(CreateAccountActivity.this, HomeActivity.class));
                     CreateAccountActivity.this.finish();
                 }
 
@@ -124,8 +200,5 @@ public class CreateAccountActivity extends LoginActivity {
 
     }
 
-    public void goToLogin(View view) {
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
-    }
+
 }

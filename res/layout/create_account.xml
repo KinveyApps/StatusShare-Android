@@ -1,86 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (c) 2012 Kinvey, Inc. All rights reserved.
+<!--
+  Copyright 2012 Kinvey, Inc.
 
-Licensed to Kinvey, Inc. under one or more contributor
-license agreements.  See the NOTICE file distributed with
-this work for additional information regarding copyright
-ownership.  Kinvey, Inc. licenses this file to you under the
-Apache License, Version 2.0 (the "License"); you may not
-use this file except in compliance with the License.  You
-may obtain a copy of the License at
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
 
-        http://www.apache.org/licenses/LICENSE-2.0
+  http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-]specific language governing permissions and limitations
-under the License.
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
-Author: Tom Giesberg -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/grid_blank"
-    >
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        >
-        <TextView
-            android:id="@+id/welcome"
-            style="@style/ButtonText"
-            android:layout_marginBottom="60dp"
-            android:textSize="30dp"
-            android:text="Welcome to StatusShare"
-            />
-        <EditText
-            android:id="@+id/userName"
-            android:layout_width="fill_parent"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="User Name"
-            android:singleLine="true"
-            android:imeOptions="actionNext">
-        </EditText>
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:password="true"
-            android:hint="Password"
-            android:singleLine="true"
-            android:imeOptions="actionNext">
-        </EditText>
-        <EditText
-            android:id="@+id/repeatPassword"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:password="true"
-            android:hint="Repeat Password"
-            android:singleLine="true"
-            android:imeOptions="actionDone">
-        </EditText>
-        <Button
-            android:id="@+id/submit"
-            style="@style/ButtonText"
-            android:background="@drawable/kinvey_button"
-            android:textColor="@drawable/kinvey_button_text_color"
-            android:text="Create New Account"
-            android:onClick="submit"
-            />
-        <TextView
-            android:id="@+id/login"
-            style="@style/ButtonText"
-            android:text="Click here if you already have an account"
-            android:onClick="goToLogin"
-            android:clickable="true"
-            />
-    </LinearLayout>
-</RelativeLayout>
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="5dp" >
 
+            <TextView
+                style="@style/HeaderTitleText"
+                android:text="@string/login_or_email" />
+
+            <EditText
+                android:id="@+id/et_login"
+                style="@style/LoginEditText"            
+                android:imeOptions="actionDone"
+                android:inputType="textEmailAddress"
+                android:nextFocusDown="@+id/et_password" />
+
+            <TextView
+                style="@style/HeaderTitleText"
+                android:text="@string/password" />
+
+            <EditText
+                android:id="@+id/et_password"
+                style="@style/LoginEditText"               
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:typeface="monospace" />
+
+            <TextView
+                style="@style/HeaderTitleText"
+                android:text="@string/confirm_password" />
+            
+            <EditText
+                android:id="@+id/confirm_password"
+                style="@style/LoginEditText"               
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:typeface="monospace" />
+            
+            <Button
+                android:id="@+id/create_account"
+                style="@style/LoginButton"
+                android:onClick="submit"
+                android:text="@string/sign_up"
+                android:textColor="@color/text" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

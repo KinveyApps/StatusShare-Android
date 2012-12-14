@@ -29,36 +29,14 @@ Author: Tom Giesberg -->
 	    android:id="@+id/updatesMain"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
-	    android:background="@color/white"
+	    android:background="@color/background"
 	    android:orientation="vertical" >
-	
-	    <RelativeLayout  
-	        android:layout_width="fill_parent"
-	        android:layout_height="48dp"
-	        android:background="#aa000000"
-	        android:padding="5sp">
-	        <TextView
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:textSize="20sp"
-	            android:text="@string/latest_updates" />
-	        <ImageButton
-	            android:id="@+id/post_update"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:contentDescription="@string/post_update"
-	            android:layout_alignParentRight="true"
-	            android:background="@android:color/transparent"
-	            android:src="@android:drawable/ic_menu_send" />
-	    </RelativeLayout>
 
 	    <ListView
             android:id="@+id/updateList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:cacheColorHint="#00000000"
-            android:visibility="gone"
-            android:paddingTop="55dp"/>
+            android:visibility="gone"/>
 
 		<ProgressBar
 		    android:id="@+id/listProgress"

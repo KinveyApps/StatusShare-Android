@@ -22,8 +22,6 @@
  */
 
 package com.kinvey.statusshare.ui;
-
-import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +29,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -39,17 +38,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.kinvey.KCSClient;
 import com.kinvey.KinveyUser;
 import com.kinvey.statusshare.R;
 import com.kinvey.statusshare.StatusShareApp;
 import com.kinvey.util.KinveyCallback;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends BaseActivity {
     public static final String TAG = LoginActivity.class.getSimpleName();
 
-    protected static final int MIN_USERNAME_LENGTH = 4;
-    protected static final int MIN_PASSWORD_LENGTH = 4;
+    public static final int MIN_USERNAME_LENGTH = 4;
+    public static final int MIN_PASSWORD_LENGTH = 4;
 
 	private static final String USER_DETAILS = "userdetails";
 	private static final String SIGNED_IN_PREF = "signedIn";
@@ -69,7 +71,7 @@ public class LoginActivity extends Activity {
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null && intent.getExtras().getBoolean(LOGGED_OUT)) {
         	Log.d(TAG, "fogetting user");
-        	forgetUserAndLogout();
+        	forgetUser();
         }
         
         mKinveyClient = ((StatusShareApp) getApplication()).getKinveyService();
@@ -82,28 +84,32 @@ public class LoginActivity extends Activity {
             mKinveyClient.loginWithUsername(username, pass, new KinveyCallback<KinveyUser>(){
                 @Override
                 public void onFailure(Throwable t) {
-                    Log.e(TAG, "failed to log in to kinvey", t);
+                    String text = "Log in failed";
+					Log.e(TAG, text, t);
+                    Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                    toast.show();
+
                 }
                 @Override
-                public void onSuccess(KinveyUser arg0) {
-                    Log.d(TAG, "logged into kinvey");
+                public void onSuccess(KinveyUser u) {
+                    CharSequence text = "Welcome back " + u.getUsername() + ".";
+                    Log.i(TAG, (String) text);
+                    Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
                     startUpdateActivity();
                 }
             });
         } else {    
-	        createContent();        
+        	setContentView(R.layout.login);
+        	
+        	mButtonSubmit = (Button) findViewById(R.id.login);
+            mEditUserName = (EditText) findViewById(R.id.et_login);
+            mEditPassword = (EditText) findViewById(R.id.et_password);
 	        addEditListeners();
 	    }
     }
 
-    public void createContent() {
-        setContentView(R.layout.login);
-        mButtonSubmit = (Button) findViewById(R.id.submit);
-        mEditUserName = (EditText) findViewById(R.id.userName);
-        mEditPassword = (EditText) findViewById(R.id.password);
-    }
-
-    public void addEditListeners() {
+    protected void addEditListeners() {
         mButtonSubmit.setEnabled(validateInput());
 
         mEditUserName.addTextChangedListener(new TextWatcher() {
@@ -186,15 +192,17 @@ public class LoginActivity extends Activity {
     public void submit(View view) {
         mKinveyClient.loginWithUsername(mEditUserName.getText().toString(), mEditPassword.getText().toString(), new KinveyCallback<KinveyUser>() {
             public void onFailure(Throwable t) {
-                CharSequence text = "Wrong username or password. Please check and try again.";
-                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+                CharSequence text = "Wrong username or password";
+                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                toast.show();
             }
 
             public void onSuccess(KinveyUser u) {
-                CharSequence text = "Welcome back," + u.getUsername() + ".";
-                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+                CharSequence text = "Logged in " + u.getUsername() + ".";
+                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+                rememberUser(u);
                 startUpdateActivity();
-                saveKinveyLoginDetails(u);
             }
 
         });
@@ -202,15 +210,14 @@ public class LoginActivity extends Activity {
 
     public void goToCreateAccount(View view) {
         startActivity(new Intent(LoginActivity.this, CreateAccountActivity.class));
-        finish();
     }
 
     private void startUpdateActivity() {
-    	LoginActivity.this.startActivity(new Intent(LoginActivity.this, UpdatesActivity.class));
+    	LoginActivity.this.startActivity(new Intent(LoginActivity.this, HomeActivity.class));
     	LoginActivity.this.finish();
     }
 
-    private void forgetUserAndLogout() {
+    private void forgetUser() {
         SharedPreferences userdetails = getSharedPreferences(USER_DETAILS, Application.MODE_PRIVATE);
         SharedPreferences.Editor userDetailsEdit = userdetails.edit();
         userDetailsEdit.putBoolean(SIGNED_IN_PREF, false);
@@ -219,7 +226,7 @@ public class LoginActivity extends Activity {
         userDetailsEdit.commit();
     }
     
-    private void saveKinveyLoginDetails(KinveyUser u) {
+    private void rememberUser(KinveyUser u) {
         SharedPreferences userdetails = getSharedPreferences(USER_DETAILS, Application.MODE_PRIVATE);
         SharedPreferences.Editor userDetailsEdit = userdetails.edit();
         userDetailsEdit.putBoolean(SIGNED_IN_PREF, true);
@@ -227,4 +234,23 @@ public class LoginActivity extends Activity {
         userDetailsEdit.putString(USERNAME_PREF, u.getUsername());
         userDetailsEdit.commit();
     }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        new MenuInflater(this).inflate(R.menu.login, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+				
+			case R.id.menu_sign_up:
+				startActivity(new Intent(this, CreateAccountActivity.class));
+				finish();
+				break;
+		}
+				
+		return super.onOptionsItemSelected(item);
+	}
 }

@@ -30,7 +30,6 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -49,7 +48,7 @@ import com.kinvey.statusshare.model.Update;
 import com.kinvey.statusshare.model.UpdateEntity;
 import com.kinvey.util.ListCallback;
 
-public class AuthorViewActivity extends Activity {
+public class AuthorViewActivity extends BaseActivity {
     public static final String TAG = AuthorViewActivity.class.getSimpleName();
     public static final Integer UPDATES_LIST_SIZE = 5;
 
@@ -100,7 +99,7 @@ public class AuthorViewActivity extends Activity {
 
         MappedAppdata mappedAppdata = mSharedClient.mappeddata(UpdateEntity.class,"Updates");
         mappedAppdata.setQuery(q);
-        mappedAppdata.fetch(UpdateEntity.class, new ListCallback<UpdateEntity>() {
+        mappedAppdata.fetch(new ListCallback<UpdateEntity>() {
             @Override
             public void onFailure(Throwable t) {
                 android.util.Log.w(TAG, "Error fetching updates data: " + t.getMessage());
@@ -145,4 +144,7 @@ public class AuthorViewActivity extends Activity {
     public void goBack(View view) {
         finish();
     }
+    
+    //TODO: add actionbar with back button
+    
 }
