@@ -1,4 +1,5 @@
 /*
+        updateList();
  * Copyright (c) 2012 Kinvey, Inc. All rights reserved.
  *
  * Licensed to Kinvey, Inc. under one or more contributor
@@ -73,7 +74,9 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onResume() {
     	super.onResume();
-        updateList();
+    	if (mUpdates == null || mUpdates.size() == 0){
+            updateList();
+    	}
     }
     
     @Override

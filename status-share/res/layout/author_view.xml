@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (c) 2012 Kinvey, Inc. All rights reserved.
+<!--
+Copyright (c) 2012 Kinvey, Inc. All rights reserved.
 
 Licensed to Kinvey, Inc. under one or more contributor
 license agreements.  See the NOTICE file distributed with
@@ -18,73 +19,56 @@ KIND, either express or implied.  See the License for the
 ]specific language governing permissions and limitations
 under the License.
 
-Author: Tom Giesberg -->
-
+Author: Tom Giesberg
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/grid_blank">
-
-    <RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#aa000000"
-        android:padding="5sp">
-        <Button
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="goBack"
-            android:text="Back" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:textSize="20sp"
-            android:text="Details" />
-    </RelativeLayout>
+    style="@style/Global"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
 
     <RelativeLayout
-        style="@style/RoundedLayout">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
 
         <ImageView
             android:id="@+id/avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/description_avatar"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:paddingRight="10dp"
-            />
+            android:paddingRight="10dp" />
+
         <TextView
             android:id="@+id/author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/avatar"
             android:textColor="#000000"
-            android:textStyle="bold"
             android:textSize="20sp"
-            />
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <TextView
-        style="@style/ButtonText"
-        android:paddingLeft="10dp"
+        style="@style/Global"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
         android:gravity="left"
-        android:text="Last 5 Updates"
-        />
+        android:paddingLeft="10dp"
+        android:text="@string/author_update_list_title" />
 
     <LinearLayout
-        style="@style/RoundedLayout"
-        android:orientation="vertical"
-        android:layout_height="fill_parent">
-        <ListView
-            android:id="@+id/updateList"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:cacheColorHint="#00000000"/>
+        android:layout_width="fill_parent"
+        android:layout_height="3dp"
+        android:layout_weight="3"
+        android:background="#cccccc" >
     </LinearLayout>
+    
+    <ListView
+        android:id="@+id/updateList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="#00000000" />
 
 </LinearLayout>
-

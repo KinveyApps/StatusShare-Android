@@ -37,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.actionbarsherlock.view.Menu;
 import com.kinvey.KCSClient;
 import com.kinvey.MappedAppdata;
 import com.kinvey.exception.KinveyException;
@@ -57,13 +58,6 @@ public class AuthorViewActivity extends BaseActivity {
     private List<Update> mUpdates;
     private Friend mFriend;
 
-/*
-    static final Comparator<Update> LATEST_FIRST_ORDER = new Comparator<Update>() {
-        public int compare(Update u1, Update u2) {
-            return u2.getDate().compareTo(u1.getDate());
-        }
-    };
-*/
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,8 +125,6 @@ public class AuthorViewActivity extends BaseActivity {
                     mUpdates.add(update);
                 }
 
-                //Collections.sort(mUpdates, LATEST_FIRST_ORDER);
-
                 lv.setAdapter(new UpdateAdapter(AuthorViewActivity.this, mUpdates));
 
             }
@@ -145,6 +137,10 @@ public class AuthorViewActivity extends BaseActivity {
         finish();
     }
     
-    //TODO: add actionbar with back button
-    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	
+        return super.onCreateOptionsMenu(menu);
+    }
+	
 }
