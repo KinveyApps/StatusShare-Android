@@ -1,0 +1,8 @@
+com.kinvey
+com.kinvey.analytics
+com.kinvey.exception
+com.kinvey.persistence
+com.kinvey.persistence.mapping
+com.kinvey.persistence.query
+com.kinvey.push
+com.kinvey.util
