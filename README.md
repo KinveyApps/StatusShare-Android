@@ -16,7 +16,7 @@ In particular this sample application highlights the following key backend tasks
 2. In Eclipse, go to __File &rarr; Import…__
 3. Click __Android &rarr; Existing Android Code into Workspace__
 4. __Browse…__ to set __Root Directory__ to the extracted zip from step 1
-5. In the __Projects__ box, make sure the __MainActivity__ project check box is selected. Then click __Finish__.
+5. In the __Projects__ box, make sure the __HomeActivity__ project check box and the __library__ project from Action Bar Sherlock are selected. Then click __Finish__.
 6. Specify your app key and secret in `StatusShareApp` constant variables
 ![key and secret]()
 
