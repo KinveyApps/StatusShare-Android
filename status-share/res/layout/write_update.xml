@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (c) 2012 Kinvey, Inc. All rights reserved.
+<!--
+Copyright (c) 2012 Kinvey, Inc. All rights reserved.
 
 Licensed to Kinvey, Inc. under one or more contributor
 license agreements.  See the NOTICE file distributed with
@@ -18,90 +19,28 @@ KIND, either express or implied.  See the License for the
 ]specific language governing permissions and limitations
 under the License.
 
-Author: Tom Giesberg -->
+Author: Tom Giesberg
+-->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/grid_blank">
+    android:layout_height="fill_parent" >
 
-    <RelativeLayout
-        android:id="@+id/toolbar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="#aa000000"
-        android:padding="5sp">
-        <Button
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="cancelUpdate"
-            android:text="Cancel" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:textSize="20sp"
-            android:text="Write Update" />
-        <Button
-            android:id="@+id/post"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:onClick="postUpdate"
-            android:text="Post" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/actionbar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#aa000000"
-        android:padding="5sp">
-        <ImageButton
-            android:id="@+id/lock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="toggleLock"
-            android:src="@drawable/unlock"
-            android:visibility="invisible" />
-        <ImageButton
-            android:id="@+id/attach"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:onClick="createAttachment"
-            android:src="@drawable/camera" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/editArea"
-        style="@style/RoundedLayout"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/toolbar"
-        android:layout_above="@+id/actionbar"
-        android:orientation="vertical">
         <EditText
             android:id="@+id/update"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.5"
-            android:gravity="top"
-            android:padding="10dp"
-            android:hint="Enter your update"
-            android:imeOptions="actionDone">
-        </EditText>
-           <ImageView
+            android:layout_height="225dp"
+            android:gravity="bottom"
+            android:hint="@string/hint_update"
+            android:imeOptions="actionDone"
+            android:padding="10dp" />
+
+        <ImageView
             android:id="@+id/preview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_weight="0.5"
-            android:layout_marginTop="10dp"/>
-
-    </LinearLayout>
-
-</RelativeLayout>
-
+            android:contentDescription="@string/description_preview" />
+    
+</LinearLayout>

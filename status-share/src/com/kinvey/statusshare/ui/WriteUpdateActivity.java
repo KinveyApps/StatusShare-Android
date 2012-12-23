@@ -29,7 +29,6 @@ import java.util.UUID;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -48,6 +47,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.kinvey.KCSClient;
 import com.kinvey.KinveyMetadata;
 import com.kinvey.KinveyResource;
@@ -57,7 +59,7 @@ import com.kinvey.statusshare.model.UpdateEntity;
 import com.kinvey.util.KinveyCallback;
 import com.kinvey.util.ScalarCallback;
 
-public class WriteUpdateActivity extends Activity {
+public class WriteUpdateActivity extends BaseActivity {
     public static final String TAG = WriteUpdateActivity.class.getSimpleName();
 
     protected KCSClient mSharedClient;
@@ -131,62 +133,62 @@ public class WriteUpdateActivity extends Activity {
         }
     }
 
-    public void createAttachment(View view) {
+    public void doAttachement() {
         mDialog.show();
     }
 
-    public void cancelUpdate(View view) {
+    public void doUpdate() {
+	    final ProgressDialog progressDialog = ProgressDialog.show(WriteUpdateActivity.this, "",
+	                    "Posting. Please wait...", true);
+	    if (mPath != null) {
+	        final File file = new File(mPath);
+	        final String ext = mPath.substring(mPath.lastIndexOf('.') + 1);
+	        final String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
+	        if (ext != null && type != null) {
+	            final String assetname = "Updates-" + UUID.randomUUID().toString() + "-attachment." + ext;
+	            final KinveyResource resource = mSharedClient.resource(assetname);
+	            resource.upload(file, new KinveyCallback<Void>() {
+	                @Override
+	                public void onFailure(Throwable e) {
+	                    e.printStackTrace();
+	                    saveUpdateText(progressDialog);
+	                }
+	
+	                @Override
+	                public void onSuccess(Void r) {
+	                    try {
+	                        //android.util.Log.d(TAG, "upload: SUCCESS, resource = " + resource.getUriForResource());
+	
+	                        JSONObject attachment = new JSONObject();
+	                        attachment.put("_mime-type", type);
+	                        attachment.put("_loc", assetname);
+	                        attachment.put("_type", "resource");
+	                        //android.util.Log.d(TAG, "saveUpdate: " + attachment);
+	                        saveUpdateAttachment(progressDialog, attachment);
+	
+	                    } catch (JSONException e) {
+	                        e.printStackTrace();
+	                    }
+	                }
+	            });
+	        } else {
+	            android.util.Log.w(TAG, "Skipping attachment because of indeterminate MIME type for file = " + mPath);
+	            saveUpdateText(progressDialog);
+	        }
+	    } else {
+	        saveUpdateText(progressDialog);
+	    }
+	}
+
+	public void cancelUpdate(View view) {
         finish();
     }
 
-    public void postUpdate(View view) {
-        final ProgressDialog progressDialog = ProgressDialog.show(WriteUpdateActivity.this, "",
-                        "Posting. Please wait...", true);
-        if (mPath != null) {
-            final File file = new File(mPath);
-            final String ext = mPath.substring(mPath.lastIndexOf('.') + 1);
-            final String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
-            if (ext != null && type != null) {
-                final String assetname = "Updates-" + UUID.randomUUID().toString() + "-attachment." + ext;
-                final KinveyResource resource = mSharedClient.resource(assetname);
-                resource.upload(file, new KinveyCallback<Void>() {
-                    @Override
-                    public void onFailure(Throwable e) {
-                        e.printStackTrace();
-                        saveUpdate(progressDialog);
-                    }
-
-                    @Override
-                    public void onSuccess(Void r) {
-                        try {
-                            //android.util.Log.d(TAG, "upload: SUCCESS, resource = " + resource.getUriForResource());
-
-                            JSONObject attachment = new JSONObject();
-                            attachment.put("_mime-type", type);
-                            attachment.put("_loc", assetname);
-                            attachment.put("_type", "resource");
-                            //android.util.Log.d(TAG, "saveUpdate: " + attachment);
-                            saveUpdate(progressDialog, attachment);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            } else {
-                android.util.Log.w(TAG, "Skipping attachment because of indeterminate MIME type for file = " + mPath);
-                saveUpdate(progressDialog);
-            }
-        } else {
-            saveUpdate(progressDialog);
-        }
+    public void saveUpdateText(ProgressDialog progressDialog) {
+        saveUpdateAttachment(progressDialog, null);
     }
 
-    public void saveUpdate(ProgressDialog progressDialog) {
-        saveUpdate(progressDialog, null);
-    }
-
-    public void saveUpdate(final ProgressDialog progressDialog, JSONObject attachment) {
+    public void saveUpdateAttachment(final ProgressDialog progressDialog, JSONObject attachment) {
         UpdateEntity updateEntity = new UpdateEntity();
 
         updateEntity.setText(((EditText) findViewById(R.id.update)).getText().toString());
@@ -254,5 +256,29 @@ public class WriteUpdateActivity extends Activity {
 
         return cursor.getString(columnIndex);
     }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        new MenuInflater(this).inflate(R.menu.update, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {		
+		switch (item.getItemId()) {
+			case R.id.menu_send_post:
+				doUpdate();
+				break;
+				
+			case R.id.menu_attach:
+				doAttachement();
+				break;
+		}
+				
+		return super.onOptionsItemSelected(item);
+	}
+
+    
+
 
 }

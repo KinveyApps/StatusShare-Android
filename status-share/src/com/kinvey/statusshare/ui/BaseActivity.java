@@ -20,10 +20,12 @@ import java.io.Serializable;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.kinvey.KCSClient;
 import com.kinvey.statusshare.R;
 import com.kinvey.statusshare.StatusShareApp;
@@ -98,4 +100,26 @@ public class BaseActivity extends SherlockActivity {
 		.create()
 		.show();
 	}
+		
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+	        	
+			case R.id.menu_about:
+				showAboutDialog();
+				return(true);
+				
+			case R.id.menu_sign_out:
+		        mKinveyClient.getActiveUser().logout();
+		        Intent intent = new Intent(this, LoginActivity.class);
+		        intent.putExtra(LoginActivity.LOGGED_OUT, true);
+		        startActivity(intent);
+		        finish();
+				return(true);
+		}
+				
+		return super.onOptionsItemSelected(item);
+	}
+	
 }

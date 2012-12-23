@@ -46,5 +46,8 @@ under the License.
 	<string name="about_ok">OK</string>
 	
 	<string name="description_refresh">Refresh</string>
+	<string name="description_preview">Image Preview</string>
+	<string name="description_send">Send Status</string>
+	<string name="hint_update">Type message</string>
 	  
 </resources>

@@ -17,20 +17,23 @@
 
     <item android:id="@+id/menu_status_post"
         android:title="@string/description_status_post"
-        android:icon="@android:drawable/ic_menu_edit"
+        android:icon="@android:drawable/stat_notify_chat"
         android:showAsAction="always" /> 
-        
+
     <item android:id="@+id/menu_refresh"
-        android:icon="@drawable/ic_action_refresh"
+        android:icon="@android:drawable/stat_notify_sync_noanim"
         android:title="@string/description_refresh"
-        android:orderInCategory="1"
-        android:showAsAction="ifRoom" />
+        android:showAsAction="always" />
+    
 
     <item android:id="@+id/menu_about"
+        android:icon="@android:drawable/ic_menu_info_details"
         android:title="@string/description_about"
         android:showAsAction="never" />
 
     <item android:id="@+id/menu_sign_out"
         android:title="@string/description_sign_out"
         android:showAsAction="never" />
+    
+    
 </menu>

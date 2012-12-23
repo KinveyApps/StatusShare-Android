@@ -207,22 +207,11 @@ public class HomeActivity extends BaseActivity {
 			case R.id.menu_status_post:
 	        	startActivity(new Intent(this, WriteUpdateActivity.class));
 	        	return(true);
-	        	
-			case R.id.menu_about:
-				showAboutDialog();
-				return(true);
 				
 			case R.id.menu_refresh:
 				updateList();
 				return(true);
 				
-			case R.id.menu_sign_out:
-		        mKinveyClient.getActiveUser().logout();
-		        Intent intent = new Intent(this, LoginActivity.class);
-		        intent.putExtra(LoginActivity.LOGGED_OUT, true);
-		        startActivity(intent);
-		        finish();
-				return(true);
 		}
 				
 		return super.onOptionsItemSelected(item);
