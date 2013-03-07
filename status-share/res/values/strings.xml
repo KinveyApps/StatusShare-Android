@@ -1,53 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (c) 2012 Kinvey, Inc. All rights reserved.
-
-Licensed to Kinvey, Inc. under one or more contributor
-license agreements.  See the NOTICE file distributed with
-this work for additional information regarding copyright
-ownership.  Kinvey, Inc. licenses this file to you under the
-Apache License, Version 2.0 (the "License"); you may not
-use this file except in compliance with the License.  You
-may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-]specific language governing permissions and limitations
-under the License.
--->
-
 <resources>
-	<string name="app_name">StatusShare</string>
+    <string name="app_name">StatusShare</string>
 
-	<string name="description_sign_out">Sign out</string>
+    <string name="description_sign_out">Sign out</string>
     <string name="description_about">About</string>
     <string name="description_avatar">avatar</string>
-    
+
     <string name="author_update_list_title">Last 5 Updates</string>
-    <string name="desc_avatar">avatar</string>    
+    <string name="desc_avatar">avatar</string>
     <string name="desc_picture">picture</string>
-    
+
     <string name="post_update">post update</string>
     <string name="latest_updates">latest updates</string>
     <string name="description_status_post">Edit Status</string>
     <string name="login_or_email">Login or Email</string>
     <string name="password">Password</string>
     <string name="login_text">Log In</string>
-   	<string name="signup_link">New to StatusShare? Sign up.</string>
-	<string name="sign_up">Sign up</string>
-	<string name="description_sign_up">Create a new account</string> 
-	<string name="confirm_password">Confirm password</string>
-	
-	<string name="title_about">About</string>
-	<string name="about_msg">&lt;strong&gt;Kinvey, Inc. 2012&lt;/strong&gt;&lt;br&gt;Version 1.4.0</string>
-	<string name="about_ok">OK</string>
-	
-	<string name="description_refresh">Refresh</string>
-	<string name="description_preview">Image Preview</string>
-	<string name="description_send">Send Status</string>
-	<string name="hint_update">Type message</string>
-	  
+    <string name="signup_link">New to StatusShare? Sign up.</string>
+    <string name="sign_up">Sign up</string>
+    <string name="description_sign_up">Create a new account</string>
+    <string name="confirm_password">Confirm password</string>
+
+    <string name="title_about">About</string>
+    <string name="about_msg">&lt;strong&gt;Kinvey, Inc. 2012&lt;/strong&gt;&lt;br&gt;Version 2.0</string>
+    <string name="about_ok">OK</string>
+
+    <string name="description_refresh">Refresh</string>
+    <string name="description_preview">Image Preview</string>
+    <string name="description_send">Send Status</string>
+    <string name="hint_update">Type message</string>
+
 </resources>

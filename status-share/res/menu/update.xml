@@ -17,21 +17,9 @@
 
     <item android:id="@+id/menu_send_post"
         android:title="@string/description_status_post"
-        android:icon="@android:drawable/ic_menu_send"
-        android:showAsAction="always" /> 
-
-    <item android:id="@+id/menu_attach"
-        android:icon="@android:drawable/ic_menu_gallery"
-        android:title="@string/description_refresh"
+        android:icon="@android:drawable/ic_menu_save"
         android:showAsAction="always" />
     
-    <item android:id="@+id/menu_about"
-        android:icon="@android:drawable/ic_menu_info_details"
-        android:title="@string/description_about"
-        android:showAsAction="never" />
 
-    <item android:id="@+id/menu_sign_out"
-        android:title="@string/description_sign_out"
-        android:showAsAction="never" />
     
 </menu>
