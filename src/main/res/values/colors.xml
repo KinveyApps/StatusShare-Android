@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2012 Kinvey, Inc. All rights reserved.
+
+Licensed to Kinvey, Inc. under one or more contributor
+license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright
+ownership.  Kinvey, Inc. licenses this file to you under the
+Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License.  You
+may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+]specific language governing permissions and limitations
+under the License.
+
+-->
+
+<resources>
+
+    <color name="background">#F9F9F9</color>
+    <color name="background_signup">#DADADA</color>
+    <color name="actionbar_background_top">#DADADA</color>
+    <color name="actionbar_background_bottom">#B5B5B5</color>
+    <color name="actionbar_background_end">#7E7E7E</color>
+    <color name="actionbar_background_start">#9C9F9F</color>
+    <color name="actionbar_text">#F9F9F9</color>
+    <color name="splash_text">#f1592a</color>
+    <color name="sign_up_text">#232323</color>
+    <color name="sign_up_text_link">#4480CA</color>
+    <color name="text_dark">#232323</color>
+    <color name="text">#232323</color>
+
+    <color name="edit_text_background">#F8F8F8</color>
+    <color name="edit_text_inner">#EDEDED</color>
+    <color name="edit_text_outer">#959595</color>
+    <color name="edit_text_cursor">#A6A6A6</color>
+    <color name="kinvey_orange">#DA5024</color>
+    <color name="ghost_white">#F8F8FF</color>
+    <color name="ebony">#555D50</color>
+
+    <!--    <color name="darkKinveyOrange">#9e3a1b</color>
+        <color name="disabledDarkKinveyOrange">#bb9e3a1b</color>
+        <color name="lightKinveyOrange">#ff5d2b</color>
+        <color name="disabledLightKinveyOrange">#bbff5d2b</color>
+        <color name="kinveyBlue">#1d3654</color>
+        <color name="darkKinveyBlue">#000</color>
+        <color name="lightKinveyBlue">#3b6ca8</color>
+        <color name="white">#fff</color> -->
+
+</resources>
