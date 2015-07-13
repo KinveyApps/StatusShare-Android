@@ -13,8 +13,8 @@
  */
 package com.kinvey.sample.statusshare.model;
 
-import com.google.api.client.json.GenericJson;
 import com.google.api.client.util.Key;
+import com.kinvey.java.LinkedResources.LinkedGenericJson;
 import com.kinvey.java.model.KinveyMetaData;
 
 
@@ -24,7 +24,7 @@ import com.kinvey.java.model.KinveyMetaData;
  * @author edwardf
  * @since 2.0
  */
-public class CommentEntity extends GenericJson {
+public class CommentEntity extends LinkedGenericJson {
 
 
 
@@ -38,6 +38,8 @@ public class CommentEntity extends GenericJson {
     private KinveyMetaData.AccessControlList acl;
     @Key("author")
     private String author;
+    @Key("updateId")
+    private String updateId;
 
 
     public CommentEntity(){
@@ -50,9 +52,6 @@ public class CommentEntity extends GenericJson {
         acl = new KinveyMetaData.AccessControlList();
         this.text = name;
     }
-
-
-
 
     public String getId() {
         return id;
@@ -94,7 +93,8 @@ public class CommentEntity extends GenericJson {
         this.author = author;
     }
 
+    public String getUpdateId() { return updateId; }
 
-
+    public void setUpdateId(String updateId) { this.updateId = updateId; }
 
 }

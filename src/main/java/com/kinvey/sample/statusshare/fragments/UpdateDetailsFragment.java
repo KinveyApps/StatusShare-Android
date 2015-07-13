@@ -13,6 +13,7 @@
  */
 package com.kinvey.sample.statusshare.fragments;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,13 +22,19 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.google.api.client.json.GenericJson;
+import com.kinvey.android.Client;
+import com.kinvey.android.callback.KinveyListCallback;
+import com.kinvey.java.Query;
 import com.kinvey.java.model.KinveyReference;
+import com.kinvey.java.query.AbstractQuery;
 import com.kinvey.sample.statusshare.MainActivity;
 import com.kinvey.sample.statusshare.R;
 import com.kinvey.sample.statusshare.component.CommentAdapter;
+import com.kinvey.sample.statusshare.model.CommentEntity;
 import com.kinvey.sample.statusshare.model.UpdateEntity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -87,19 +94,33 @@ public class UpdateDetailsFragment extends KinveyFragment{
         text.setText(entity.getText());
         author.setText(entity.getAuthorName());
 
-        List<KinveyReference> commentRefs = entity.getComments();
-        if (commentRefs == null){
-            return;
-        }
-        List<GenericJson> comments = new ArrayList<GenericJson>();
+        Query q = getClient().appData(MainActivity.COL_COMMENTS, CommentEntity.class).query();
+        q.equals("updateId",entity.getId());
+        q.addSort("_kmd.lmt", AbstractQuery.SortOrder.ASC);
 
-        for (KinveyReference kr : commentRefs){
-            comments.add(kr.getResolvedObject());
-        }
-
-        CommentAdapter adapter = new CommentAdapter(getActivity(), comments,  getActivity().getLayoutInflater());
-        commentList.setAdapter(adapter);
-
+        getClient().linkedData(MainActivity.COL_COMMENTS, CommentEntity.class).get(q, new KinveyListCallback<CommentEntity>() {
+            @Override
+            public void onSuccess(CommentEntity[] result) {
+                if (result == null) {
+                    return;
+                }
+                Log.d(Client.TAG, "Count of comments found: " + result.length);
+                for (CommentEntity e : result) {
+                    Log.d(Client.TAG, "comment -> " + e.toString());
+                }
+                if (getActivity() == null) {
+                    return;
+                }
+                ArrayList < CommentEntity > comments = new ArrayList<CommentEntity>();
+                comments.addAll(Arrays.asList(result));
+                CommentAdapter adapter = new CommentAdapter(getActivity(), comments, getActivity().getLayoutInflater());
+                commentList.setAdapter(adapter);
+            }
+            @Override
+            public void onFailure(Throwable error) {
+                Log.w(Client.TAG, "Error fetching comments data: " + error.getMessage());
+            }
+        }, null, new String[]{"text", "author", "updateId"}, 3, true);
 
     }
 

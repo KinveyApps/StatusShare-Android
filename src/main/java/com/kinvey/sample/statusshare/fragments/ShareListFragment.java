@@ -89,15 +89,6 @@ public class ShareListFragment extends KinveyFragment {
     }
 
 
-
-
-
-
-
-
-
-
-
     private void loadUpdates() {
         showListView(false);
 
@@ -193,7 +184,7 @@ public class ShareListFragment extends KinveyFragment {
 
             case R.id.menu_sign_out:
                 getClient().user().logout().execute();
-                getActivity().finish();
+                ((MainActivity) getActivity()).replaceFragment(new LoginFragment(), true);
 
                 return true;
         }

@@ -11,6 +11,7 @@ package com.kinvey.sample.statusshare.component;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,12 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.google.api.client.json.GenericJson;
 import com.google.api.client.util.ArrayMap;
+import com.kinvey.android.Client;
 import com.kinvey.sample.statusshare.MainActivity;
 import com.kinvey.sample.statusshare.R;
+import com.kinvey.sample.statusshare.model.CommentEntity;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 import java.text.ParsePosition;
@@ -29,12 +34,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class CommentAdapter extends ArrayAdapter<GenericJson> {
+public class CommentAdapter extends ArrayAdapter<CommentEntity> {
 
     private LayoutInflater mInflater;
     private Typeface roboto;
 
-    public CommentAdapter(Context context, List<GenericJson> objects,
+    public CommentAdapter(Context context, List<CommentEntity> objects,
                           LayoutInflater inf) {
         // NOTE: I pass an arbitrary textViewResourceID to the super
         // constructor-- Below I override
@@ -55,7 +60,7 @@ public class CommentAdapter extends ArrayAdapter<GenericJson> {
         TextView author = null;
         TextView when = null;
 
-        GenericJson rowData = getItem(position);
+        CommentEntity rowData = getItem(position);
 
         if (null == convertView) {
             convertView = mInflater.inflate(R.layout.row_comment, null);
@@ -64,26 +69,32 @@ public class CommentAdapter extends ArrayAdapter<GenericJson> {
         }
         holder = (UpdateViewHolder) convertView.getTag();
 
-        if (rowData.get("text") != null){
+        if (rowData.getText() != null){
             comment = holder.getBlurb();
-            comment.setText(rowData.get("text").toString());
+            comment.setText(rowData.getText());
         }
 
-        if (rowData.get("author") != null){
+        if (rowData.getAuthor() != null){
             author = holder.getAuthor();
-            author.setText(rowData.get("author").toString());
+            author.setText(rowData.getAuthor());
 
         }
 
 
 
         ParsePosition pp = new ParsePosition(0);
-        Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.US).parse(((ArrayMap)rowData.get("_kmd")).get("ect").toString(), pp);
-        String since = MainActivity.getSince(date, Calendar.getInstance());
-        if (since != null){
-            when = holder.getWhen();
-            when.setText(since);
-
+        String dateString = rowData.getMeta().toString();
+        try {
+            JSONObject jsonObj = new JSONObject(dateString);
+            Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.US).parse(jsonObj.getString("ect"), pp);
+            String since = MainActivity.getSince(date, Calendar.getInstance());
+            if (since != null){
+                when = holder.getWhen();
+                when.setText(since);
+            }
+        } catch (JSONException e) {
+            Log.d(Client.TAG, "comment JSONException");
+            e.printStackTrace();
         }
 
         return convertView;
