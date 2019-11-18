@@ -11,7 +11,7 @@
  * the License.
  * 
  */
-package com.kinvey.sample.statusshare.fragments;
+package com.kinvey.sample.statusshare.ui.fragments;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -31,8 +31,8 @@ import com.kinvey.java.core.KinveyClientCallback;
 import com.kinvey.java.linkedResources.LinkedFile;
 import com.kinvey.java.model.KinveyMetaData;
 import com.kinvey.java.store.StoreType;
-import com.kinvey.sample.statusshare.Constants;
-import com.kinvey.sample.statusshare.MainActivity;
+import com.kinvey.sample.statusshare.utils.Constants;
+import com.kinvey.sample.statusshare.ui.MainActivity;
 import com.kinvey.sample.statusshare.R;
 import com.kinvey.sample.statusshare.model.UpdateEntity;
 

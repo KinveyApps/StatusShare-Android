@@ -26,12 +26,11 @@ import android.util.Log;
 
 import com.google.api.client.util.Key;
 import com.kinvey.android.Client;
-import com.kinvey.android.model.User;
 import com.kinvey.java.linkedResources.LinkedGenericJson;
 import com.kinvey.java.model.KinveyMetaData;
 import com.kinvey.java.model.KinveyReference;
-import com.kinvey.sample.statusshare.Constants;
-import com.kinvey.sample.statusshare.MainActivity;
+import com.kinvey.sample.statusshare.utils.Constants;
+import com.kinvey.sample.statusshare.ui.MainActivity;
 
 /**
  * This class maintains a Status Update which can be persisted with Kinvey.

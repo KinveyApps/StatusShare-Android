@@ -11,7 +11,7 @@
  * the License.
  * 
  */
-package com.kinvey.sample.statusshare.fragments;
+package com.kinvey.sample.statusshare.ui.fragments;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.kinvey.android.model.User;
 import com.kinvey.android.store.UserStore;
 import com.kinvey.java.core.KinveyClientCallback;
-import com.kinvey.sample.statusshare.MainActivity;
+import com.kinvey.sample.statusshare.ui.MainActivity;
 import com.kinvey.sample.statusshare.R;
 
 import java.io.IOException;

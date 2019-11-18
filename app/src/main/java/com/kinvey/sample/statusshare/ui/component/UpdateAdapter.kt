@@ -7,7 +7,7 @@
  * contents is a violation of applicable laws.
  *
  */
-package com.kinvey.sample.statusshare.component
+package com.kinvey.sample.statusshare.ui.component
 
 import android.content.Context
 import android.view.LayoutInflater

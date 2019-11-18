@@ -1,4 +1,4 @@
-package com.kinvey.sample.statusshare
+package com.kinvey.sample.statusshare.utils
 
 import android.app.Activity
 import android.view.inputmethod.InputMethodManager

@@ -1,4 +1,4 @@
-package com.kinvey.sample.statusshare;
+package com.kinvey.sample.statusshare.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,8 +16,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.api.client.http.HttpTransport;
 import com.kinvey.android.Client;
-import com.kinvey.sample.statusshare.fragments.LoginFragment;
+import com.kinvey.sample.statusshare.R;
+import com.kinvey.sample.statusshare.ui.fragments.LoginFragment;
 import com.kinvey.sample.statusshare.model.UpdateEntity;
+import com.kinvey.sample.statusshare.utils.Constants;
 
 import java.io.File;
 import java.util.Calendar;

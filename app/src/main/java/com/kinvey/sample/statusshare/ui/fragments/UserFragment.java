@@ -11,7 +11,7 @@
  * the License.
  * 
  */
-package com.kinvey.sample.statusshare.fragments;
+package com.kinvey.sample.statusshare.ui.fragments;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
@@ -34,9 +34,9 @@ import com.kinvey.java.Query;
 import com.kinvey.java.model.KinveyReadResponse;
 import com.kinvey.java.query.AbstractQuery;
 import com.kinvey.java.store.StoreType;
-import com.kinvey.sample.statusshare.Constants;
+import com.kinvey.sample.statusshare.utils.Constants;
 import com.kinvey.sample.statusshare.R;
-import com.kinvey.sample.statusshare.component.UpdateAdapter;
+import com.kinvey.sample.statusshare.ui.component.UpdateAdapter;
 import com.kinvey.sample.statusshare.model.UpdateEntity;
 
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +48,6 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import timber.log.Timber;

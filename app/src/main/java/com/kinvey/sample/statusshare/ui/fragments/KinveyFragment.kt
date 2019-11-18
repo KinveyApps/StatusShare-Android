@@ -11,7 +11,7 @@
  * the License.
  *
  */
-package com.kinvey.sample.statusshare.fragments
+package com.kinvey.sample.statusshare.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,7 +19,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.kinvey.android.Client
-import com.kinvey.sample.statusshare.StatusShareApplication
+import com.kinvey.android.model.User
+import com.kinvey.sample.statusshare.App
 
 /**
  *
@@ -51,8 +52,8 @@ abstract class KinveyFragment : Fragment() {
      *
      * @return an instance of a Kinvey Client
      */
-    val client: Client<*>?
-        get() = (activity!!.applicationContext as StatusShareApplication).client
+    val client: Client<User>?
+        get() = (activity?.applicationContext as App).client
 
     /**
      * If you are adding a new fragment, add a new layout.xml file and reference it here.

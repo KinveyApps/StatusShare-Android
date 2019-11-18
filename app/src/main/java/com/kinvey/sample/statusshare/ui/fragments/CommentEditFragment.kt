@@ -11,7 +11,7 @@
  * the License.
  *
  */
-package com.kinvey.sample.statusshare.fragments
+package com.kinvey.sample.statusshare.ui.fragments
 
 import android.os.Bundle
 import android.view.Menu
@@ -22,10 +22,10 @@ import com.kinvey.android.store.DataStore
 import com.kinvey.java.core.KinveyClientCallback
 import com.kinvey.java.model.KinveyReference
 import com.kinvey.java.store.StoreType
-import com.kinvey.sample.statusshare.Constants
-import com.kinvey.sample.statusshare.MainActivity
+import com.kinvey.sample.statusshare.utils.Constants
+import com.kinvey.sample.statusshare.ui.MainActivity
 import com.kinvey.sample.statusshare.R
-import com.kinvey.sample.statusshare.UiUtils
+import com.kinvey.sample.statusshare.utils.UiUtils
 import com.kinvey.sample.statusshare.model.CommentEntity
 import com.kinvey.sample.statusshare.model.UpdateEntity
 import kotlinx.android.synthetic.main.fragment_edit_comment.*

@@ -7,7 +7,7 @@
  * contents is a violation of applicable laws.
  *
  */
-package com.kinvey.sample.statusshare.component
+package com.kinvey.sample.statusshare.ui.component
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -15,9 +15,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.kinvey.sample.statusshare.Constants.ECT_FIELD_NAME
-import com.kinvey.sample.statusshare.Constants.SERVER_DATE_FMT
-import com.kinvey.sample.statusshare.MainActivity
+import com.kinvey.sample.statusshare.utils.Constants.ECT_FIELD_NAME
+import com.kinvey.sample.statusshare.utils.Constants.SERVER_DATE_FMT
+import com.kinvey.sample.statusshare.ui.MainActivity
 import com.kinvey.sample.statusshare.R.id
 import com.kinvey.sample.statusshare.R.layout
 import com.kinvey.sample.statusshare.model.CommentEntity

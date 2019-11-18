@@ -11,7 +11,7 @@
  * the License.
  * 
  */
-package com.kinvey.sample.statusshare.fragments;
+package com.kinvey.sample.statusshare.ui.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -22,20 +22,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.google.api.client.json.GenericJson;
+
 import com.kinvey.android.Client;
-import com.kinvey.android.callback.KinveyListCallback;
 import com.kinvey.android.callback.KinveyReadCallback;
 import com.kinvey.android.store.DataStore;
 import com.kinvey.java.Query;
 import com.kinvey.java.model.KinveyReadResponse;
-import com.kinvey.java.model.KinveyReference;
 import com.kinvey.java.query.AbstractQuery;
 import com.kinvey.java.store.StoreType;
-import com.kinvey.sample.statusshare.Constants;
-import com.kinvey.sample.statusshare.MainActivity;
+import com.kinvey.sample.statusshare.utils.Constants;
+import com.kinvey.sample.statusshare.ui.MainActivity;
 import com.kinvey.sample.statusshare.R;
-import com.kinvey.sample.statusshare.component.CommentAdapter;
+import com.kinvey.sample.statusshare.ui.component.CommentAdapter;
 import com.kinvey.sample.statusshare.model.CommentEntity;
 import com.kinvey.sample.statusshare.model.UpdateEntity;
 
@@ -43,7 +41,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
