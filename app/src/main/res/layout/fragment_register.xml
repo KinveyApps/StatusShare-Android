@@ -28,21 +28,21 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <TextView android:id="@+id/register_username_label"
+            <TextView android:id="@+id/registerUsernameLabel"
                 android:layout_width="match_parent"
                 android:textSize="24sp"
                 android:layout_height="wrap_content"
                 android:text="@string/login_username"/>
 
             <EditText
+                android:id="@+id/registerUsernameEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/register_username"
                 android:imeOptions="actionDone"
                 android:inputType="textEmailAddress"
                 android:nextFocusDown="@+id/et_password"/>
 
-            <TextView android:id="@+id/register_password_label"
+            <TextView android:id="@+id/registerPasswordLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
@@ -50,14 +50,14 @@
                 android:text="@string/login_password"/>
 
             <EditText
+                android:id="@+id/registerPasswordEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/register_password"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:typeface="monospace"/>
 
-            <TextView android:id="@+id/register_confirm_label"
+            <TextView android:id="@+id/registerConfirmLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
@@ -65,17 +65,17 @@
                 android:text="@string/confirm_password"/>
 
             <EditText
+                android:id="@+id/registerConfirmPasswordEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/register_confirm_password"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:typeface="monospace"/>
 
             <Button
+                android:id="@+id/registerCreateAccountBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/register_create_account"
                 android:layout_margin="10dp"
                 android:text="@string/sign_up" />
 

@@ -22,31 +22,34 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView android:id="@+id/update_text"
+        <TextView android:id="@+id/updateText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Text.Roboto.Thin.Title1"
             android:text="This is the text of an update"
             android:ellipsize="end"
-            android:singleLine="true"
-            android:textSize="36sp"/>
+            android:singleLine="true" />
 
-        <TextView android:id="@+id/update_author"
+        <TextView android:id="@+id/updateAuthorText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Text.Roboto.Thin"
             android:gravity="right"
             android:text="username"
-            android:textSize="24sp"/>
+            android:textSize="24sp" />
     </LinearLayout>
 
-    <ImageView android:id="@+id/update_image"
+    <ImageView
+        android:id="@+id/updateImage"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
         android:layout_weight="1" />
 
-    <ListView android:id="@+id/update_comment_list"
+    <ListView
+        android:id="@+id/updateCommentList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"/>
+        android:layout_weight="2" />
 
 </LinearLayout>

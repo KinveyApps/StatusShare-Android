@@ -14,13 +14,16 @@
 package com.kinvey.sample.statusshare.ui.fragments
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.kinvey.android.Client
 import com.kinvey.android.model.User
 import com.kinvey.sample.statusshare.App
+import com.kinvey.sample.statusshare.ui.MainActivity
 
 /**
  *
@@ -46,6 +49,18 @@ abstract class KinveyFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         populateViews()
+    }
+
+    fun replaceFragment(frag: Fragment, addToBackStack: Boolean) {
+        (activity as MainActivity?)?.replaceFragment(frag, addToBackStack)
+    }
+
+    fun showToast(text: CharSequence, showCentered: Boolean = false) {
+        val toast = Toast.makeText(activity?.applicationContext, text, Toast.LENGTH_LONG)
+        if (showCentered) {
+            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0)
+        }
+        toast.show()
     }
 
     /**

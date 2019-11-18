@@ -50,7 +50,6 @@ class CommentEditFragment : KinveyFragment() {
     override val viewID = R.layout.fragment_edit_comment
 
     override fun bindViews(v: View) {
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -106,12 +105,12 @@ class CommentEditFragment : KinveyFragment() {
         return parent
     }
 
-    fun setParent(parent: UpdateEntity) {
+    fun setParent(parent: UpdateEntity?) {
         this.parent = parent
     }
 
     companion object {
-        fun newInstance(parent: UpdateEntity): CommentEditFragment {
+        fun newInstance(parent: UpdateEntity?): CommentEditFragment {
             val ret = CommentEditFragment()
             ret.setHasOptionsMenu(true)
             ret.setParent(parent)

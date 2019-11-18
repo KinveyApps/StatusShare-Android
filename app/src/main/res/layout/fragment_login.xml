@@ -28,21 +28,21 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <TextView android:id="@+id/login_label_username"
+            <TextView android:id="@+id/loginLabelUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
                 android:text="@string/login_username"/>
 
             <EditText
-                android:id="@+id/et_login"
+                android:id="@+id/etLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
                 android:inputType="textEmailAddress"
                 android:nextFocusDown="@+id/et_password"/>
 
-            <TextView android:id="@+id/login_label_password"
+            <TextView android:id="@+id/loginLabelPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
@@ -50,7 +50,7 @@
                 android:text="@string/login_password"/>
 
             <EditText
-                android:id="@+id/et_password"
+                android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
@@ -60,9 +60,8 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/login"
+                android:id="@+id/loginBtn"
                 android:layout_margin="10dp"
-                android:onClick="submit"
                 android:text="@string/login_text" />
 
         </LinearLayout>
