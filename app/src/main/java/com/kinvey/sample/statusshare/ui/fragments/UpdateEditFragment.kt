@@ -25,7 +25,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.ArrayAdapter
-import com.kinvey.android.store.DataStore
+import com.kinvey.android.store.LinkedDataStore
+import com.kinvey.java.AbstractClient
 import com.kinvey.java.core.KinveyClientCallback
 import com.kinvey.java.linkedResources.LinkedFile
 import com.kinvey.java.model.KinveyMetaData.AccessControlList
@@ -34,6 +35,10 @@ import com.kinvey.sample.statusshare.R
 import com.kinvey.sample.statusshare.model.UpdateEntity
 import com.kinvey.sample.statusshare.utils.BitmapTools
 import com.kinvey.sample.statusshare.utils.Constants
+import com.kinvey.sample.statusshare.utils.Constants.ACL_FIELD
+import com.kinvey.sample.statusshare.utils.Constants.ATTACHMENT_FIELD
+import com.kinvey.sample.statusshare.utils.Constants.PUBLIC_FIELD
+import com.kinvey.sample.statusshare.utils.Constants.USERNAME_FIELD_NAME
 import com.kinvey.sample.statusshare.utils.UiUtils
 import kotlinx.android.synthetic.main.fragment_write_update.*
 import timber.log.Timber
@@ -47,11 +52,11 @@ class UpdateEditFragment : KinveyFragment(), OnClickListener {
 
     private var mDialog: AlertDialog? = null
     private var image: Bitmap? = null
-    private var dataStore: DataStore<UpdateEntity>? = null
+    private var dataStore: LinkedDataStore<UpdateEntity>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dataStore = DataStore.collection(Constants.COL_UPDATES, UpdateEntity::class.java, StoreType.AUTO, client)
+        dataStore = LinkedDataStore(client as AbstractClient<*>, Constants.COL_UPDATES, UpdateEntity::class.java, StoreType.AUTO)
         setHasOptionsMenu(true)
         val items = arrayOf("From Camera", "From SD Card")
         val adapter = ArrayAdapter(activity!!, layout.select_dialog_item, items)
@@ -87,30 +92,35 @@ class UpdateEditFragment : KinveyFragment(), OnClickListener {
         previewImage?.setOnClickListener(this)
     }
 
-    fun doUpdate() {
+    private fun doUpdate() {
         val progressDialog = ProgressDialog.show(activity, "", "Posting. Please wait...", true)
         val byteArray = BitmapTools.compressImage(image)
-        val fileName = "${client?.activeUser?.id}_attachment_${System.currentTimeMillis()}.png"
+        val fileName = attachmentFilename()
         saveUpdateAttachment(progressDialog, byteArray, fileName)
     }
 
+    private fun attachmentFilename(): String? {
+        return "${client?.activeUser?.id}_attachment_${System.currentTimeMillis()}.png"
+    }
+
     private fun saveUpdateAttachment(progressDialog: ProgressDialog, bytes: ByteArray?, filename: String?) {
-        val updateEntity = UpdateEntity(client?.activeUser?.id)
+        val updateEntity = UpdateEntity(userId = client?.activeUser?.id)
+        updateEntity.authorName = (client?.activeUser)?.get(USERNAME_FIELD_NAME)?.toString()
         updateEntity.text = updateEdit.text.toString()
         updateEntity.acl?.setGloballyReadable(true)
         Timber.d("updateEntity.getMeta().isGloballyReadable() = ${updateEntity.acl?.isGloballyReadable}")
         if (bytes != null && filename != null) {
             Timber.i("there is an attachment!")
             val lf = LinkedFile(filename)
-            lf.addExtra("_public", true)
+            lf.addExtra(PUBLIC_FIELD, true)
             val acl = AccessControlList()
             acl.setGloballyReadable(true)
-            lf.addExtra("_acl", acl)
-            updateEntity.putFile("attachment", lf)
+            lf.addExtra(ACL_FIELD, acl)
+            updateEntity.putFile(ATTACHMENT_FIELD, lf)
         }
         val bais = if (bytes == null) null else ByteArrayInputStream(bytes)
         if (bais != null) {
-            updateEntity.getFile("attachment")?.input = bais
+            updateEntity.getFile(ATTACHMENT_FIELD)?.input = bais
         }
         dataStore?.save(updateEntity, object : KinveyClientCallback<UpdateEntity> {
             override fun onSuccess(result: UpdateEntity) {
@@ -150,8 +160,6 @@ class UpdateEditFragment : KinveyFragment(), OnClickListener {
     }
 
     override fun onClick(v: View) {
-        if (v === previewImage) {
-            mDialog?.show()
-        }
+        if (v === previewImage) { mDialog?.show() }
     }
 }

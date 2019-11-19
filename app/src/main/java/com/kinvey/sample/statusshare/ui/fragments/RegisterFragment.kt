@@ -13,7 +13,6 @@
  */
 package com.kinvey.sample.statusshare.ui.fragments
 
-import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
@@ -35,16 +34,22 @@ import kotlinx.android.synthetic.main.fragment_register.*
  */
 class RegisterFragment : KinveyFragment(), OnClickListener {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override val viewID: Int
         get() = R.layout.fragment_register
 
     override fun bindViews(v: View) {
         addEditListeners()
     }
+
+    private val loginStr: String
+        get() {
+            return registerUsernameEdit?.text?.toString() ?: ""
+        }
+
+    private val passStr: String
+        get() {
+            return registerPasswordEdit?.text?.toString() ?: ""
+        }
 
     private fun addEditListeners() {
         registerCreateAccountBtn?.setOnClickListener(this)
@@ -117,7 +122,7 @@ class RegisterFragment : KinveyFragment(), OnClickListener {
     }
 
     private fun submit() {
-        UserStore.signUp(registerUsernameEdit?.text.toString(), registerPasswordEdit?.text.toString(), client as Client<User>,
+        UserStore.signUp(loginStr, passStr, client as Client<User>,
         object : KinveyClientCallback<User> {
             override fun onSuccess(result: User) {
                 if (activity == null) { return }

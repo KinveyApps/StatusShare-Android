@@ -16,7 +16,8 @@ package com.kinvey.sample.statusshare.ui.fragments
 import android.os.Bundle
 import android.view.*
 import com.kinvey.android.callback.KinveyReadCallback
-import com.kinvey.android.store.DataStore
+import com.kinvey.android.store.LinkedDataStore
+import com.kinvey.java.AbstractClient
 import com.kinvey.java.Query
 import com.kinvey.java.model.KinveyReadResponse
 import com.kinvey.java.query.AbstractQuery.SortOrder
@@ -24,8 +25,10 @@ import com.kinvey.java.store.StoreType
 import com.kinvey.sample.statusshare.R
 import com.kinvey.sample.statusshare.model.CommentEntity
 import com.kinvey.sample.statusshare.model.UpdateEntity
-import com.kinvey.sample.statusshare.ui.component.CommentAdapter
+import com.kinvey.sample.statusshare.ui.adapter.CommentAdapter
 import com.kinvey.sample.statusshare.utils.Constants
+import com.kinvey.sample.statusshare.utils.Constants.KMD_LMT_FIELD_NAME
+import com.kinvey.sample.statusshare.utils.Constants.UPDATE_ID_NAME
 import kotlinx.android.synthetic.main.fragment_update_details.*
 import timber.log.Timber
 import kotlin.collections.ArrayList
@@ -34,14 +37,14 @@ import kotlin.collections.ArrayList
  * @author edwardf
  * @since 2.0
  */
-class UpdateDetailsFragment private constructor() : KinveyFragment() {
+class UpdateDetailsFragment : KinveyFragment() {
     
     private var entity: UpdateEntity? = null
-    private var dataStore: DataStore<CommentEntity>? = null
+    private var dataStore: LinkedDataStore<CommentEntity>? = null
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dataStore = DataStore.collection(Constants.COL_UPDATES, CommentEntity::class.java, StoreType.AUTO, client)
+        dataStore = LinkedDataStore(client as AbstractClient<*>, Constants.COL_COMMENTS, CommentEntity::class.java, StoreType.AUTO)
     }
 
     override val viewID = R.layout.fragment_update_details
@@ -58,9 +61,9 @@ class UpdateDetailsFragment private constructor() : KinveyFragment() {
         }
         updateText?.text = entity?.text
         updateAuthorText?.text = entity?.authorName
-        val q = dataStore?.query() as Query
-        q.equals("updateId", entity?.id)
-        q.addSort("_kmd.lmt", SortOrder.ASC)
+        val q = Query()
+            .equals(UPDATE_ID_NAME, entity?.id)
+            .addSort(KMD_LMT_FIELD_NAME, SortOrder.ASC)
         dataStore?.find(q, object : KinveyReadCallback<CommentEntity> {
             override fun onSuccess(result: KinveyReadResponse<CommentEntity>?) {
                 if (result == null) { return }
@@ -79,15 +82,6 @@ class UpdateDetailsFragment private constructor() : KinveyFragment() {
             }
         }, null)
         //, new String[]{"text", "author", "updateId"}, 3, true);
-
-    }
-
-    fun getEntity(): UpdateEntity? {
-        return entity
-    }
-
-    fun setEntity(entity: UpdateEntity?) {
-        this.entity = entity
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -112,7 +106,7 @@ class UpdateDetailsFragment private constructor() : KinveyFragment() {
     companion object {
         fun newInstance(entity: UpdateEntity?): UpdateDetailsFragment {
             val frag = UpdateDetailsFragment()
-            frag.setEntity(entity)
+            frag.entity = entity
             frag.setHasOptionsMenu(true)
             return frag
         }

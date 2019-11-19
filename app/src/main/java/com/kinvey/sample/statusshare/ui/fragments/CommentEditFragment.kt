@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Kinvey Inc.
+ * Copyright (c) 2019 Kinvey Inc.
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -18,12 +18,12 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import com.kinvey.android.store.DataStore
+import com.kinvey.android.store.LinkedDataStore
+import com.kinvey.java.AbstractClient
 import com.kinvey.java.core.KinveyClientCallback
 import com.kinvey.java.model.KinveyReference
 import com.kinvey.java.store.StoreType
 import com.kinvey.sample.statusshare.utils.Constants
-import com.kinvey.sample.statusshare.ui.MainActivity
 import com.kinvey.sample.statusshare.R
 import com.kinvey.sample.statusshare.utils.UiUtils
 import com.kinvey.sample.statusshare.model.CommentEntity
@@ -38,13 +38,13 @@ import timber.log.Timber
 class CommentEditFragment : KinveyFragment() {
 
     private var parent: UpdateEntity? = null
-    private var dataStoreUpdate: DataStore<UpdateEntity>? = null
-    private var dataStoreComment: DataStore<CommentEntity>? = null
+    private var dataStoreUpdate: LinkedDataStore<UpdateEntity>? = null
+    private var dataStoreComment: LinkedDataStore<CommentEntity>? = null
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dataStoreUpdate = DataStore.collection(Constants.COL_UPDATES, UpdateEntity::class.java, StoreType.AUTO, client)
-        dataStoreComment = DataStore.collection(Constants.COL_COMMENTS, CommentEntity::class.java, StoreType.AUTO, client)
+        dataStoreUpdate = LinkedDataStore(client as AbstractClient<*>, Constants.COL_UPDATES, UpdateEntity::class.java, StoreType.AUTO)
+        dataStoreComment = LinkedDataStore(client as AbstractClient<*>, Constants.COL_COMMENTS, CommentEntity::class.java, StoreType.AUTO)
     }
 
     override val viewID = R.layout.fragment_edit_comment
@@ -66,11 +66,13 @@ class CommentEditFragment : KinveyFragment() {
 
     private fun saveComment() {
         UiUtils.hideKeyboard(activity)
-        val ent = CommentEntity(commentTitle?.text.toString())
+        val ent = CommentEntity(text = commentText?.text.toString())
         ent.acl?.setGloballyReadable(true)
         ent.author = client?.activeUser?.username
+        ent.updateId = parent?.id
         val updateAuthor = KinveyReference(parent?.author?.collection, parent?.author?.id)
         parent?.author = updateAuthor
+        parent?.authorName = ent.author
         parent?.resetCommentReferences()
         dataStoreComment?.save(ent, object : KinveyClientCallback<CommentEntity> {
             override fun onSuccess(commentEntity: CommentEntity) {
@@ -89,31 +91,21 @@ class CommentEditFragment : KinveyFragment() {
     private fun saveUpdateEntity(entity: UpdateEntity) {
         dataStoreUpdate?.save(entity, object : KinveyClientCallback<UpdateEntity> {
             override fun onSuccess(updateEntity: UpdateEntity) {
-                if (activity == null) { return }
-                if (activity != null) {
-                    (activity as MainActivity?)?.shareList = null
-                    (activity as MainActivity?)?.replaceFragment(ShareListFragment(), false)
-                }
+                mainActivity?.shareList = null
+                replaceFragment(ShareListFragment(), false)
             }
+
             override fun onFailure(throwable: Throwable) {
                 Timber.e("error adding update entity -> $throwable")
             }
         })
     }
 
-    fun getParent(): UpdateEntity? {
-        return parent
-    }
-
-    fun setParent(parent: UpdateEntity?) {
-        this.parent = parent
-    }
-
     companion object {
         fun newInstance(parent: UpdateEntity?): CommentEditFragment {
             val ret = CommentEditFragment()
             ret.setHasOptionsMenu(true)
-            ret.setParent(parent)
+            ret.parent = parent
             return ret
         }
     }

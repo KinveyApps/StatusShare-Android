@@ -1,27 +1,28 @@
 package com.kinvey.sample.statusshare.ui
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.core.app.ActivityCompat
 import com.google.api.client.http.HttpTransport
-import com.kinvey.sample.statusshare.R.id
-import com.kinvey.sample.statusshare.R.layout
+import com.kinvey.sample.statusshare.R
 import com.kinvey.sample.statusshare.model.UpdateEntity
 import com.kinvey.sample.statusshare.ui.fragments.LoginFragment
 import com.kinvey.sample.statusshare.utils.BitmapTools.decodeFromCameraUri
 import com.kinvey.sample.statusshare.utils.BitmapTools.decodeFromFile
 import com.kinvey.sample.statusshare.utils.Constants
 import com.kinvey.sample.statusshare.utils.FileUtil.getCaptureFilePath
+import kotlinx.android.synthetic.main.activity_fragment_holder.*
 import timber.log.Timber
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class MainActivity : AppCompatActivity() {
+open class MainActivity : BaseCompatActivity() {
 
     private var mImageCaptureUri: Uri? = null
     var bitmap: Bitmap? = null
@@ -29,19 +30,14 @@ class MainActivity : AppCompatActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layout.activity_fragment_holder)
+        setSupportActionBar(myToolbar)
         Logger.getLogger(HttpTransport::class.java.name).level = LOGGING_LEVEL
         replaceFragment(LoginFragment(), false)
     }
 
-    fun replaceFragment(frag: Fragment, addToBackStack: Boolean) {
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(id.fragmentBox, frag)
-        if (addToBackStack) {
-            ft.addToBackStack(frag.toString())
-        }
-        ft.commit()
-    }
+    override val layoutId = R.layout.activity_fragment_holder
+
+    override val contentId = R.id.fragmentBox
 
     /**
      * This method will be called after the user either selects a photo from their gallery or takes a picture with their camera
@@ -64,7 +60,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun startCamera() {
+    fun startCamera(requestPermissions: Boolean = true) {
+        if (!verifyCameraPermissions(this)) {
+            if (requestPermissions) { requestCameraPermissions(this) }
+            return
+        }
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         mImageCaptureUri = getCaptureFilePath()
         try {
@@ -79,14 +79,66 @@ class MainActivity : AppCompatActivity() {
     /**
      * This method wraps the code to kick off the "chooser" intent, which allows user to select where to select image from
      */
-    fun startFilePicker() {
+    fun startFilePicker(requestPermissions: Boolean = true) {
+        if (!verifyStoragePermissions(this)) {
+            if (requestPermissions) { requestStoragePermissions(this) }
+            return
+        }
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "Complete action using"), Constants.PICK_FROM_FILE)
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_EXTERNAL_STORAGE -> startFilePicker(false)
+            REQUEST_CAMERA -> startCamera(false)
+        }
+    }
+
     companion object {
         private val LOGGING_LEVEL: Level? = Level.FINEST
+
+        private const val REQUEST_EXTERNAL_STORAGE = 1
+        private const val REQUEST_CAMERA = 2
+
+        private val PERMISSIONS_STORAGE = arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+
+        private val PERMISSIONS_CAMERA = arrayOf(Manifest.permission.CAMERA)
+
+        /**
+         * Checks if the app has permission to write to device storage
+         *
+         * If the app does not has permission then the user will be prompted to grant permissions
+         *
+         * @param activity
+         */
+        fun verifyStoragePermissions(activity: Activity): Boolean {
+            // Check if we have write permission
+            val permissionWrite = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            val permissionRead = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
+            return permissionWrite == PackageManager.PERMISSION_GRANTED && permissionRead == PackageManager.PERMISSION_GRANTED
+        }
+
+        fun requestStoragePermissions(activity: Activity) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE)
+        }
+
+        fun verifyCameraPermissions(activity: Activity): Boolean {
+            // Check if we have permission
+            val permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.CAMERA)
+            return permission == PackageManager.PERMISSION_GRANTED
+        }
+
+        fun requestCameraPermissions(activity: Activity) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(activity, PERMISSIONS_CAMERA, REQUEST_CAMERA)
+        }
     }
 }

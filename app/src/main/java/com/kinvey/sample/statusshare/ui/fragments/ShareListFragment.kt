@@ -14,6 +14,7 @@
 package com.kinvey.sample.statusshare.ui.fragments
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -23,6 +24,7 @@ import android.widget.AdapterView.OnItemClickListener
 
 import com.kinvey.android.callback.KinveyReadCallback
 import com.kinvey.android.store.DataStore
+import com.kinvey.android.store.LinkedDataStore
 import com.kinvey.android.store.UserStore
 import com.kinvey.java.AbstractClient
 import com.kinvey.java.Query
@@ -32,9 +34,10 @@ import com.kinvey.java.model.KinveyReadResponse
 import com.kinvey.java.query.AbstractQuery.SortOrder
 import com.kinvey.java.store.StoreType
 import com.kinvey.sample.statusshare.R
+import com.kinvey.sample.statusshare.model.CommentEntity
 import com.kinvey.sample.statusshare.model.UpdateEntity
 import com.kinvey.sample.statusshare.ui.MainActivity
-import com.kinvey.sample.statusshare.ui.component.UpdateAdapter
+import com.kinvey.sample.statusshare.ui.adapter.UpdateAdapter
 import com.kinvey.sample.statusshare.utils.Constants
 import kotlinx.android.synthetic.main.fragment_updates_list.*
 import timber.log.Timber
@@ -48,14 +51,14 @@ import java.util.*
  */
 class ShareListFragment : KinveyFragment() {
     
-    private var dataStore: DataStore<UpdateEntity>? = null
+    private var dataStore: LinkedDataStore<UpdateEntity>? = null
     
     private var mAdapter: UpdateAdapter? = null
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        dataStore = DataStore.collection(Constants.COL_UPDATES, UpdateEntity::class.java, StoreType.AUTO, client)
+        dataStore = LinkedDataStore(client as AbstractClient<*>, Constants.COL_UPDATES, UpdateEntity::class.java, StoreType.AUTO)
         activity?.invalidateOptionsMenu()
     }
 
@@ -66,8 +69,8 @@ class ShareListFragment : KinveyFragment() {
         loadUpdates()
     }
 
-    override fun onAttach(activity: Activity) {
-        super.onAttach(activity)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
         if (updateList == null) { return }
         if ((activity as MainActivity).shareList == null) {
             loadUpdates()
@@ -76,9 +79,9 @@ class ShareListFragment : KinveyFragment() {
 
     private fun loadUpdates() {
         showListView(false)
-        val q = dataStore?.query() as Query
-        q.setLimit(10)
-        q.addSort("_kmd.lmt", SortOrder.DESC)
+        val q =  Query()
+            .setLimit(10)
+            .addSort(Constants.KMD_LMT_FIELD_NAME, SortOrder.DESC)
         dataStore?.find(q, object : KinveyReadCallback<UpdateEntity> {
             override fun onSuccess(result: KinveyReadResponse<UpdateEntity>?) {
                 val list = result?.result ?: listOf()

@@ -41,9 +41,12 @@ abstract class KinveyFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, group: ViewGroup?, saved: Bundle?): View? {
-        val v: View = inflater.inflate(viewID, group, false)
-        bindViews(v)
-        return v
+        return inflater.inflate(viewID, group, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bindViews(view)
     }
 
     override fun onResume() {
@@ -73,7 +76,7 @@ abstract class KinveyFragment : Fragment() {
      * @return an instance of a Kinvey Client
      */
     val client: Client<User>?
-        get() = (activity?.applicationContext as App).client
+        get() = App.instance?.client
 
     /**
      * If you are adding a new fragment, add a new layout.xml file and reference it here.

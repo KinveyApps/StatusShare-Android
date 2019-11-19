@@ -23,6 +23,10 @@ under the License.
 
 <resources>
 
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
     <color name="background">#F9F9F9</color>
     <color name="background_signup">#DADADA</color>
     <color name="actionbar_background_top">#DADADA</color>
@@ -43,14 +47,5 @@ under the License.
     <color name="kinvey_orange">#DA5024</color>
     <color name="ghost_white">#F8F8FF</color>
     <color name="ebony">#555D50</color>
-
-    <!--    <color name="darkKinveyOrange">#9e3a1b</color>
-        <color name="disabledDarkKinveyOrange">#bb9e3a1b</color>
-        <color name="lightKinveyOrange">#ff5d2b</color>
-        <color name="disabledLightKinveyOrange">#bbff5d2b</color>
-        <color name="kinveyBlue">#1d3654</color>
-        <color name="darkKinveyBlue">#000</color>
-        <color name="lightKinveyBlue">#3b6ca8</color>
-        <color name="white">#fff</color> -->
 
 </resources>

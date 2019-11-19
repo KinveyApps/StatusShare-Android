@@ -7,68 +7,60 @@
  * contents is a violation of applicable laws.
  *
  */
-package com.kinvey.sample.statusshare.ui.component
+package com.kinvey.sample.statusshare.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
-import com.kinvey.sample.statusshare.utils.Constants.ECT_FIELD_NAME
-import com.kinvey.sample.statusshare.utils.Constants.SERVER_DATE_FMT
-import com.kinvey.sample.statusshare.R.id
-import com.kinvey.sample.statusshare.R.layout
-import com.kinvey.sample.statusshare.model.CommentEntity
-import com.kinvey.sample.statusshare.utils.TimeUtil
-import org.json.JSONException
-import org.json.JSONObject
-import timber.log.Timber
-import java.text.ParsePosition
-import java.text.SimpleDateFormat
-import java.util.*
+import com.kinvey.sample.statusshare.R.*
+import com.kinvey.sample.statusshare.model.UpdateEntity
 
-class CommentAdapter // NOTE: I pass an arbitrary textViewResourceID to the super
+class UpdateAdapter 
+// NOTE: I pass an arbitrary textViewResourceID to the super
 // constructor-- Below I override
 // getView(...), which causes the underlying adapter to ignore this
 // field anyways, it is just needed in the constructor.
-(context: Context?, objects: List<CommentEntity?>, private val mInflater: LayoutInflater) 
-    : ArrayAdapter<CommentEntity?>(context!!, 0, objects) {
-    
-    private val format = SimpleDateFormat(SERVER_DATE_FMT, Locale.US)
-    private val zeroPp = ParsePosition(0)
+(context: Context, objects: List<UpdateEntity>, private val mInflater: LayoutInflater)
+    : ArrayAdapter<UpdateEntity>(context, 0, objects) {
     
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        
         var convertView = convertView
         var holder: UpdateViewHolder? = null
-        var commentText: TextView? = null
-        var authorText: TextView? = null
-        var whenText: TextView? = null
+        var mBlurb: TextView? = null
+        var mAuthor: TextView? = null
+        var mWhen: TextView? = null
+        var mAttachment: ImageView? = null
+        
         val rowData = getItem(position)
         if (null == convertView) {
-            convertView = mInflater.inflate(layout.row_comment, null)
+            convertView = mInflater.inflate(layout.row_update, null)
             holder = UpdateViewHolder(convertView)
             convertView.tag = holder
         }
         holder = convertView?.tag as UpdateViewHolder
         if (rowData?.text != null) {
-            commentText = holder.blurb
-            commentText?.text = rowData.text
+            mBlurb = holder.blurb
+            mBlurb?.text = rowData.text
         }
-        if (rowData?.author != null) {
-            authorText = holder?.author
-            authorText?.text = rowData.author
+        if (rowData?.authorName != null) {
+            mAuthor = holder?.author
+            mAuthor?.text = rowData.authorName
         }
-        val dateString = rowData?.meta.toString()
-        try {
-            val jsonObj = JSONObject(dateString)
-            val ectDateStr: String = jsonObj.getString(ECT_FIELD_NAME)
-            val date = format.parse(ectDateStr, zeroPp)
-            val since = TimeUtil.getSince(date, Calendar.getInstance())
-            whenText = holder?.whenText
-            whenText?.text = since
-        } catch (e: JSONException) {
-            Timber.d("comment JSONException")
+        if (rowData?.since != null) {
+            mWhen = holder?.whenText
+            mWhen?.text = rowData.since
+        }
+        mAttachment = holder?.attachment
+        if (rowData?.thumbnail != null) {
+            mAttachment?.setImageBitmap(rowData.thumbnail)
+        } else {
+            mAttachment?.setBackgroundColor(color.ebony)
+            mAttachment?.setImageBitmap(null)
         }
         return convertView
     }
@@ -86,11 +78,19 @@ class CommentAdapter // NOTE: I pass an arbitrary textViewResourceID to the supe
      * a new view for every single row, which can have a negative effect on
      * performance (especially with large lists on large screen devices).
      */
-    private inner class UpdateViewHolder(private val rowView: View) {
+    private inner class UpdateViewHolder(private val mRow: View) {
+        var attachment: ImageView? = null
+            get() {
+                if (null == field) {
+                    field = mRow.findViewById<View>(id.row_update_image) as ImageView
+                }
+                return field
+            }
+            private set
         var blurb: TextView? = null
             get() {
                 if (null == field) {
-                    field = rowView.findViewById<View>(id.row_comment_text) as TextView
+                    field = mRow.findViewById<View>(id.row_update_text) as TextView
                 }
                 return field
             }
@@ -98,7 +98,7 @@ class CommentAdapter // NOTE: I pass an arbitrary textViewResourceID to the supe
         var author: TextView? = null
             get() {
                 if (null == field) {
-                    field = rowView.findViewById<View>(id.row_comment_author) as TextView
+                    field = mRow.findViewById<View>(id.row_update_author) as TextView
                 }
                 return field
             }
@@ -106,7 +106,7 @@ class CommentAdapter // NOTE: I pass an arbitrary textViewResourceID to the supe
         var whenText: TextView? = null
             get() {
                 if (null == field) {
-                    field = rowView.findViewById<View>(id.row_comment_time) as TextView
+                    field = mRow.findViewById<View>(id.row_update_time) as TextView
                 }
                 return field
             }

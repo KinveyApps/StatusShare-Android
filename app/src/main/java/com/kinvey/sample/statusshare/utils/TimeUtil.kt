@@ -9,8 +9,8 @@ object TimeUtil {
     private const val HOUR_AGO_STR = "h ago"
     private const val DAY_AGO_STR = "d ago"
 
-    fun getSince(d: Date, c: Calendar): String {
-        val secsSince = (c.time.time - d.time) / 1000L
+    fun getSince(d: Date?, c: Calendar): String {
+        val secsSince = (c.time.time - (d?.time ?: 0L)) / 1000L
         return when {
             secsSince < 60 -> NOW_STR
             secsSince < 60 * 60 -> "${secsSince / 60}$MINUTE_AGO_STR"

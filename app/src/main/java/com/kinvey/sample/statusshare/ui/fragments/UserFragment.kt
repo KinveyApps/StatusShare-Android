@@ -23,14 +23,17 @@ import android.view.MenuInflater
 import android.view.View
 import com.kinvey.android.callback.KinveyReadCallback
 import com.kinvey.android.store.DataStore
+import com.kinvey.android.store.LinkedDataStore
+import com.kinvey.java.AbstractClient
 import com.kinvey.java.Query
 import com.kinvey.java.model.KinveyReadResponse
 import com.kinvey.java.query.AbstractQuery.SortOrder
 import com.kinvey.java.store.StoreType
 import com.kinvey.sample.statusshare.R
 import com.kinvey.sample.statusshare.model.UpdateEntity
-import com.kinvey.sample.statusshare.ui.component.UpdateAdapter
+import com.kinvey.sample.statusshare.ui.adapter.UpdateAdapter
 import com.kinvey.sample.statusshare.utils.Constants
+import com.kinvey.sample.statusshare.utils.Constants.ACL_CREATOR_FIELD_NAME
 import com.kinvey.sample.statusshare.utils.FileUtil.getAvatarUrl
 import kotlinx.android.synthetic.main.fragment_view_author.*
 import timber.log.Timber
@@ -46,7 +49,7 @@ import java.util.*
  */
 class UserFragment private constructor() : KinveyFragment() {
 
-    private var dataStore: DataStore<UpdateEntity>? = null
+    private var dataStore: LinkedDataStore<UpdateEntity>? = null
     private var updates: MutableList<UpdateEntity>? = null
     private var source: UpdateEntity? = null
     private var gravatar: Bitmap? = null
@@ -58,7 +61,7 @@ class UserFragment private constructor() : KinveyFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        dataStore = DataStore.collection(Constants.COL_UPDATES, UpdateEntity::class.java, StoreType.AUTO, client)
+        dataStore = LinkedDataStore(client as AbstractClient<*>, Constants.COL_UPDATES, UpdateEntity::class.java, StoreType.AUTO)
     }
 
     override fun populateViews() {
@@ -73,11 +76,11 @@ class UserFragment private constructor() : KinveyFragment() {
     private fun updateList() {
         authorListProgress?.visibility = View.VISIBLE
         authorUpdateList?.visibility = View.GONE
-        val q = Query()
-        q.equals("_acl.creator", source?.authorID)
-        q.addSort("_kmd.lmt", SortOrder.DESC)
-        q.setLimit(UPDATES_LIST_SIZE)
-        dataStore?.find(q, object : KinveyReadCallback<UpdateEntity> {
+        val query = Query()
+            .equals(ACL_CREATOR_FIELD_NAME, source?.authorID)
+            .addSort(Constants.KMD_LMT_FIELD_NAME, SortOrder.DESC)
+            .setLimit(UPDATES_LIST_SIZE)
+        dataStore?.find(query, object : KinveyReadCallback<UpdateEntity> {
             override fun onSuccess(result: KinveyReadResponse<UpdateEntity>?) {
                 val list = result?.result ?: listOf()
                 Timber.d("Count of updates found: ${list?.size}")

@@ -56,10 +56,20 @@ class LoginFragment : KinveyFragment(), OnClickListener {
         addEditListeners()
     }
 
+    private val loginStr: String
+        get() {
+            return etLogin?.text?.toString() ?: ""
+        }
+
+    private val passStr: String
+        get() {
+            return etPassword?.text?.toString() ?: ""
+        }
+
     override fun onClick(v: View) {
         if (v === loginBtn) {
             try {
-                UserStore.login(etLogin?.text.toString(), etPassword?.text.toString(), client as Client<User>,
+                UserStore.login(loginStr, passStr, client as Client<User>,
                 object : KinveyClientCallback<User> {
                     override fun onSuccess(result: User) {
                         if (activity == null) { return }
@@ -96,7 +106,7 @@ class LoginFragment : KinveyFragment(), OnClickListener {
             }
             false
         })
-        etPassword.addTextChangedListener(object : TextWatcher {
+        etPassword?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence?, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence?, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable?) { loginBtn?.isEnabled = validateInput() }

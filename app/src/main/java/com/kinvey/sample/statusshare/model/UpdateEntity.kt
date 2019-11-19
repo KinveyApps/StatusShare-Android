@@ -21,9 +21,10 @@ import com.kinvey.java.model.KinveyMetaData
 import com.kinvey.java.model.KinveyMetaData.AccessControlList
 import com.kinvey.java.model.KinveyReference
 import com.kinvey.sample.statusshare.utils.Constants
+import com.kinvey.sample.statusshare.utils.Constants.KMD_FIELD_NAME
+import com.kinvey.sample.statusshare.utils.Constants.USERNAME_FIELD_NAME
 import com.kinvey.sample.statusshare.utils.TimeUtil.getSince
 import timber.log.Timber
-import java.text.ParsePosition
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,7 +34,7 @@ import java.util.*
  * @author edwardf
  * @since 2.0
  */
-data class UpdateEntity(var userId: String? = "",
+data class UpdateEntity(
     //----persisted fields
     @Key("_id")
     var id: String? = null,
@@ -46,10 +47,14 @@ data class UpdateEntity(var userId: String? = "",
     @Key("author")
     var author: KinveyReference? = null,
     @Key("comments")
-    var comments: ArrayList<KinveyReference>? = null
+    var comments: ArrayList<KinveyReference>? = null,
+    var userId: String? = ""
 ) : LinkedGenericJson() {
 
+    private var dateFormat: SimpleDateFormat? = null
+
     init {
+        dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.US)
         putFile(Constants.ATTACHMENT_NAME)
         author = KinveyReference()
         author?.collection = Constants.USER_COLLECTION_NAME
@@ -59,31 +64,48 @@ data class UpdateEntity(var userId: String? = "",
     //-----displayed inferred fields
     var authorName: String? = null
         get() {
-            if (author?.resolvedObject != null) {
-                field = author?.resolvedObject!!["username"] as String
+            if (author != null) {
+                field = author!![USERNAME_FIELD_NAME] as String?
             }
             return if (field == null) "--" else field
         }
-        private set
+        set (value) {
+            if (author != null) {
+                author!![USERNAME_FIELD_NAME] = value
+            }
+        }
 
     var authorID: String? = null
         get() {
-            if (author?.resolvedObject != null) {
-                field = author?.resolvedObject!!["_id"] as String
-            }
+            field = author?.id
             return if (field == null) "" else field
         }
         private set
 
     var since: String? = null
         get() {
-            val pp = ParsePosition(0)
-            val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.US).parse(meta?.entityCreationTime, pp)
-            field = getSince(date, Calendar.getInstance())
-            Timber.i("getting since -> ${field != null}")
+            if (field == null) {
+                val date = dateFormat?.parse(ect ?: "")
+                field = if (date != null) getSince(date, Calendar.getInstance()) else null
+                Timber.i("getting since -> ${field != null}")
+            }
             return field
         }
         private set//close the output stream//Then decode from the output stream and get the image.//and there is an actual LinkedFile behind the Key//If it hasn't been resolved...
+
+    var ect: String? = null
+        get() {
+            if (field.isNullOrEmpty()) {
+                val kmd = get(KMD_FIELD_NAME)
+                field = if (kmd is Map<*, *>) {
+                    val ect = kmd[Constants.ECT_FIELD_NAME]
+                    ect?.toString() ?: ""
+                } else {
+                    null
+                }
+            }
+            return field
+        }
 
     /**
      * Get the thumbnail from the LinkedResource
@@ -113,8 +135,6 @@ data class UpdateEntity(var userId: String? = "",
             return field
         }
         private set
-
-
 
     fun addComment(newComment: CommentEntity) {
         if (comments == null) {

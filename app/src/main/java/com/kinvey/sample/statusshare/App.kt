@@ -14,6 +14,8 @@
 package com.kinvey.sample.statusshare
 
 import android.app.Application
+import android.content.Context
+import androidx.multidex.MultiDex
 import com.google.api.client.http.HttpTransport
 import com.kinvey.android.Client
 import com.kinvey.android.Client.Builder
@@ -26,11 +28,11 @@ import java.util.logging.Logger
  * @since 2.0
  */
 class App : Application() {
-    
+
     var client: Client<User>? = null
         get() {
             if (field == null) {
-                field = Builder<User>(applicationContext).build()
+                field = Builder<User>(this).build()
             }
             return field
         }
@@ -38,12 +40,19 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
         // run the following comamnd to turn on verbose logging:
         // adb shell setprop log.tag.HttpTransport DEBUG
         Logger.getLogger(HttpTransport::class.java.name).level = LOGGING_LEVEL
     }
 
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        MultiDex.install(base)
+    }
+
     companion object {
+        var instance: App? = null
         private val LOGGING_LEVEL: Level? = Level.FINEST
     }
 }

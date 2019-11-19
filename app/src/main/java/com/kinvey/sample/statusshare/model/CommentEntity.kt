@@ -18,6 +18,8 @@ import com.kinvey.java.linkedResources.LinkedGenericJson
 import com.kinvey.java.model.KinveyMetaData
 import com.kinvey.java.model.KinveyMetaData.AccessControlList
 import com.kinvey.sample.statusshare.utils.Constants
+import com.kinvey.sample.statusshare.utils.Constants.ECT_FIELD_NAME
+import com.kinvey.sample.statusshare.utils.Constants.KMD_FIELD_NAME
 
 /**
  * This class maintains a Comment which can be persisted with Kinvey.
@@ -38,4 +40,19 @@ data class CommentEntity(
     var author: String? = null,
     @Key("updateId")
     var updateId: String? = null
-) : LinkedGenericJson()
+) : LinkedGenericJson() {
+
+    var ect: String? = null
+        get() {
+            if (field.isNullOrEmpty()) {
+                val kmd = get(KMD_FIELD_NAME)
+                field = if (kmd is Map<*, *>) {
+                    val ect = kmd[ECT_FIELD_NAME]
+                    ect?.toString() ?: ""
+                } else {
+                    null
+                }
+            }
+            return field
+        }
+}
