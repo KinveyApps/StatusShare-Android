@@ -67,7 +67,7 @@ class CommentEditFragment : KinveyFragment() {
     private fun saveComment() {
         UiUtils.hideKeyboard(activity)
         val ent = CommentEntity(commentTitle?.text.toString())
-        ent.acl.setGloballyReadable(true)
+        ent.acl?.setGloballyReadable(true)
         ent.author = client?.activeUser?.username
         val updateAuthor = KinveyReference(parent?.author?.collection, parent?.author?.id)
         parent?.author = updateAuthor

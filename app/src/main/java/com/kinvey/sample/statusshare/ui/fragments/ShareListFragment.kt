@@ -25,6 +25,7 @@ import com.kinvey.android.callback.KinveyReadCallback
 import com.kinvey.android.store.DataStore
 import com.kinvey.android.store.UserStore
 import com.kinvey.java.AbstractClient
+import com.kinvey.java.Query
 import com.kinvey.java.core.KinveyClientCallback
 import com.kinvey.java.dto.BaseUser
 import com.kinvey.java.model.KinveyReadResponse
@@ -75,7 +76,7 @@ class ShareListFragment : KinveyFragment() {
 
     private fun loadUpdates() {
         showListView(false)
-        val q = dataStore!!.query()
+        val q = dataStore?.query() as Query
         q.setLimit(10)
         q.addSort("_kmd.lmt", SortOrder.DESC)
         dataStore?.find(q, object : KinveyReadCallback<UpdateEntity> {
@@ -85,12 +86,9 @@ class ShareListFragment : KinveyFragment() {
                 for (e in list) {
                     Timber.d("result -> $e")
                 }
-                if (activity == null) {
-                    return
-                }
-                (activity as MainActivity?)?.shareList = ArrayList()
-                (activity as MainActivity?)?.shareList?.addAll(list)
-                if ((activity as MainActivity?)?.shareList?.size == 0) {
+                if (activity == null) { return }
+                mainActivity?.shareList = ArrayList(list)
+                if (mainActivity?.shareList?.size == 0) {
                     emptyListText?.visibility = View.VISIBLE
                     updateProgress?.visibility = View.GONE
                 } else {
@@ -98,7 +96,6 @@ class ShareListFragment : KinveyFragment() {
                     setAdapter()
                 }
             }
-
             override fun onFailure(error: Throwable) {
                 Timber.w("Error fetching updates data: " + error.message)
                 showListView(true)
@@ -108,12 +105,12 @@ class ShareListFragment : KinveyFragment() {
     }
 
     private fun setAdapter() {
-        if ((activity as MainActivity?)!!.shareList == null) {
+        if (mainActivity?.shareList == null) {
             Timber.i("not ready to set Adapter")
             return
         }
         showListView(true)
-        mAdapter = UpdateAdapter(activity!!, (activity as MainActivity?)!!.shareList, activity!!.layoutInflater)
+        mAdapter = UpdateAdapter(activity!!, mainActivity?.shareList ?: listOf(), activity!!.layoutInflater)
         updateList?.adapter = mAdapter
         updateList?.onItemClickListener = OnItemClickListener { parent, view, position, id ->
             val item = (activity as MainActivity?)?.shareList?.get(position)

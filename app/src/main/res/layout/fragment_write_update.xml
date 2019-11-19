@@ -18,32 +18,35 @@
     android:background="@color/ghost_white"
     android:layout_height="match_parent">
 
-    <TextView android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/shareTitle"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:textSize="36sp"
-        android:text="Share"
-        android:id="@+id/share_title"/>
+        style="@style/Text.Roboto.Thin.Title1"
+        android:text="Share" />
 
     <EditText
-        android:id="@+id/update"
+        android:id="@+id/updateEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/Text.Roboto.Thin"
         android:textColor="@color/ebony"
         android:hint="Enter an update!"/>
 
-    <TextView android:layout_height="wrap_content"
-        android:paddingTop="10dp"
+    <TextView
+        android:id="@+id/shareAttachTitle"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:textSize="36sp"
-        android:text="Attach a File"
-        android:id="@+id/share_attach_title"/>
+        style="@style/Text.Roboto.Thin.Title1"
+        android:paddingTop="10dp"
+        android:text="Attach a File" />
 
     <ImageView
-        android:id="@+id/preview"
-        android:padding="20dp"
+        android:id="@+id/previewImage"
         android:layout_width="wrap_content"
-        android:layout_gravity="center"
         android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:layout_gravity="center"
         android:scaleType="centerCrop"
         android:background="@drawable/camera"
         android:contentDescription="@string/description_preview"/>

@@ -17,10 +17,10 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.kinvey.sample.statusshare.utils.Constants.ECT_FIELD_NAME
 import com.kinvey.sample.statusshare.utils.Constants.SERVER_DATE_FMT
-import com.kinvey.sample.statusshare.ui.MainActivity
 import com.kinvey.sample.statusshare.R.id
 import com.kinvey.sample.statusshare.R.layout
 import com.kinvey.sample.statusshare.model.CommentEntity
+import com.kinvey.sample.statusshare.utils.TimeUtil
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
@@ -63,12 +63,10 @@ class CommentAdapter // NOTE: I pass an arbitrary textViewResourceID to the supe
         try {
             val jsonObj = JSONObject(dateString)
             val ectDateStr: String = jsonObj.getString(ECT_FIELD_NAME)
-            val date: Date? = format.parse(ectDateStr, zeroPp)
-            val since: String? = MainActivity.getSince(date, Calendar.getInstance())
-            if (since != null) {
-                whenText = holder?.whenText
-                whenText?.text = since
-            }
+            val date = format.parse(ectDateStr, zeroPp)
+            val since = TimeUtil.getSince(date, Calendar.getInstance())
+            whenText = holder?.whenText
+            whenText?.text = since
         } catch (e: JSONException) {
             Timber.d("comment JSONException")
         }

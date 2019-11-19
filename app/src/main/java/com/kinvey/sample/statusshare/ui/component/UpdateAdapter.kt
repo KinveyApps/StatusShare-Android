@@ -24,8 +24,8 @@ class UpdateAdapter
 // constructor-- Below I override
 // getView(...), which causes the underlying adapter to ignore this
 // field anyways, it is just needed in the constructor.
-(context: Context, objects: List<UpdateEntity?>, private val mInflater: LayoutInflater) 
-    : ArrayAdapter<UpdateEntity?>(context, 0, objects) {
+(context: Context, objects: List<UpdateEntity>, private val mInflater: LayoutInflater)
+    : ArrayAdapter<UpdateEntity>(context, 0, objects) {
     
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         

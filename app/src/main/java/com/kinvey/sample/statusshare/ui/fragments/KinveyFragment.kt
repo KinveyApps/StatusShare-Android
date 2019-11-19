@@ -51,6 +51,11 @@ abstract class KinveyFragment : Fragment() {
         populateViews()
     }
 
+    val mainActivity : MainActivity?
+        get() {
+            return activity as MainActivity?
+        }
+
     fun replaceFragment(frag: Fragment, addToBackStack: Boolean) {
         (activity as MainActivity?)?.replaceFragment(frag, addToBackStack)
     }

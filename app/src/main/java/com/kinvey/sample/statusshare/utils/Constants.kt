@@ -12,4 +12,7 @@ object Constants {
     const val PICK_FROM_FILE = 2
 
     const val SERVER_DATE_FMT = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+
+    const val ATTACHMENT_NAME = "attachment"
+
 }
