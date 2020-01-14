@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Text.Roboto.Thin" parent="">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">roboto_thin</item>
+    </style>
+
+    <style name="Text.Roboto.Thin.Title">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Text.Roboto.Thin.Title1">
+        <item name="android:textSize">36sp</item>
+    </style>
+
+</resources>
